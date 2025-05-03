@@ -1,0 +1,196 @@
+/* Reset CSS cơ bản */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Thêm background đầy đủ, không có khung */
+.modern-login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  /* Thay đổi background thành hình tòa nhà VCB ban đêm */
+  background-image: url('../../assets/images/backgrounds/login-night.jpg');
+  background-size: cover;
+  background-position: center;
+  font-family: 'Montserrat', sans-serif;
+  padding: 0; /* Bỏ padding để background lấp đầy */
+  position: relative;
+}
+
+/* Điều chỉnh gradient overlay xanh đậm hơn */
+.modern-login-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Gradient xanh đậm phủ toàn màn hình */
+  background: linear-gradient(rgba(0, 20, 0, 0.2), rgba(0, 40, 0, 0.5));
+  z-index: 1;
+}
+
+/* Loại bỏ khung và đặt lại kích thước nội dung */
+.login-content {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  width: 100%;
+  z-index: 2;
+  position: relative;
+  padding: 0 20px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+/* Điều chỉnh form và các input */
+.modern-login-form {
+  width: 100%;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 15px;
+  background-color: rgba(255, 255, 255, 0);
+  border: 2px solid rgb(255, 255, 255);
+  border-radius: 8px;
+  color: rgb(255, 255, 255);
+  font-size: 16px;
+  transition: all 0.3s;
+}
+
+.form-group input::placeholder {
+  color: rgba(255, 255, 255, 0.7); /* Màu trắng với độ trong suốt 30% */
+  opacity: 1; /* Cần thiết cho Firefox */
+}
+
+
+.password-input {
+  width: 100%;
+  padding: 15px;
+  padding-right: 45px; /* Để chừa chỗ cho icon */
+  background-color: rgba(255, 255, 255, 0);
+  border: 2px solid rgb(255, 255, 255);
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  transition: all 0.3s;
+}
+
+input[type="password"] + .password-toggle {
+  background-image: url('../../assets/icons/show_password.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+/* Icon khi mật khẩu đang hiển thị */
+input[type="text"] + .password-toggle {
+  background-image: url('../../assets/icons/hide_password.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+/* Vị trí cho nút toggle */
+.password-toggle {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  z-index: 2;
+  /* Tạo vùng click trong suốt */
+  background-color: transparent;
+}
+
+/* Hiển thị thông báo lỗi màu đỏ */
+.error-message {
+  color: #ff5252; /* Đỏ tươi */
+  font-size: 12px;
+  margin-top: 5px;
+  text-align: left;
+}
+
+/* Nút đăng nhập xanh lá đậm */
+.login-button {
+  width: 100%;
+  padding: 15px;
+  background-color: #67a929; /* Xanh lá VCB */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 20px;
+}
+
+.login-button:hover {
+  background-color: #578d23; /* Tối hơn khi hover */
+}
+
+/* Điều chỉnh logo để lớn hơn */
+.login-logo img {
+  height: 70px;
+  margin-bottom: 30px;
+}
+
+/* Căn giữa header */
+.login-header {
+  text-align: center;
+  color: white;
+  margin-bottom: 30px;
+}
+
+
+.links-container {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Link quên mật khẩu */
+.forgot-link {
+  display: block;
+  margin-top: 20px;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+/* Style cho phần đăng ký */
+.register-redirect {
+  color: white;
+  font-size: 14px;
+  text-align: center;
+}
+
+.register-redirect a {
+  color: #8cde4a; /* Màu xanh lá nhạt */
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.register-redirect a:hover {
+  text-decoration: underline;
+}

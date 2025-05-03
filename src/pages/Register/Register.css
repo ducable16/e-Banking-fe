@@ -1,0 +1,184 @@
+/* Kế thừa các style từ login.css */
+.modern-register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-image: url('../../assets/images/backgrounds/login-night.jpg');
+  background-size: cover;
+  background-position: center;
+  font-family: 'Montserrat', sans-serif;
+  padding: 0;
+  position: relative;
+}
+
+.modern-register-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(rgba(0, 20, 0, 0.2), rgba(0, 40, 0, 0.5));
+  z-index: 1;
+}
+
+.register-content {
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+  width: 100%;
+  z-index: 2;
+  position: relative;
+  padding: 0 20px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.register-header {
+  text-align: center;
+  color: white;
+  margin-bottom: 30px;
+}
+
+.modern-register-form {
+  width: 100%;
+}
+
+/* Style cho textarea */
+.form-group textarea {
+  width: 100%;
+  padding: 15px;
+  background-color: rgba(255, 255, 255, 0);
+  border: 2px solid rgb(255, 255, 255);
+  border-radius: 8px;
+  color: rgb(255, 255, 255);
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-group input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+  opacity: 1;
+}
+
+/* Buttons */
+.button-group {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.back-button {
+  flex: 1;
+  padding: 15px;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.back-button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.register-button {
+  flex: 2;
+  padding: 15px;
+  background-color: #67a929;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.register-button:hover {
+  background-color: #578d23;
+}
+
+/* Link quay lại đăng nhập */
+.login-redirect {
+  margin-top: 20px;
+  text-align: center;
+  color: white;
+  font-size: 14px;
+}
+
+.login-redirect a {
+  color: #8cde4a;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.login-redirect a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .register-content {
+    padding: 0 15px;
+  }
+  
+  .button-group {
+    flex-direction: column;
+  }
+  
+  .back-button, .register-button {
+    width: 100%;
+  }
+
+
+  /* Thêm vào cuối file Register.css */
+
+  /* OTP styles */
+  .otp-instruction {
+    color: white;
+    text-align: center;
+    margin-bottom: 25px;
+    line-height: 1.5;
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 8px;
+  }
+
+  .otp-input-group {
+    margin: 25px 0;
+  }
+
+  .otp-input {
+    text-align: center;
+    letter-spacing: 8px;
+    font-size: 20px !important;
+    padding: 15px !important;
+    font-weight: bold;
+  }
+
+  .resend-otp {
+    margin-top: 20px;
+    text-align: center;
+    color: white;
+    font-size: 14px;
+  }
+
+  .resend-otp a {
+    color: #8cde4a;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .resend-otp a:hover {
+    text-decoration: underline;
+  }
+
+}

@@ -1,0 +1,746 @@
+/* Main Layout */
+.banking-app {
+  display: flex;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #171941 0%, #111133 100%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #fff;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 280px;
+  background-color: #141430;
+  color: white;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  height: 100vh;
+  overflow-y: auto; /* Cho phép cuộn */
+
+  /* Ẩn thanh cuộn cho các trình duyệt WebKit (Chrome, Safari) */
+  &::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+  }
+
+  /* Ẩn thanh cuộn cho Firefox */
+  scrollbar-width: none;
+
+  /* Ẩn thanh cuộn cho IE và Edge */
+  -ms-overflow-style: none;
+}
+
+.logo {
+  padding: 1rem 0;
+  display: flex;
+  align-items: center;
+}
+
+.logo h2 {
+  font-size: 28px; /* Tăng kích thước logo */
+  margin: 10px 0;
+}
+
+.search-bar {
+  margin: 0.5rem 0 1.5rem; /* Điều chỉnh margin */
+  position: relative;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 10px 15px 10px 40px; /* Padding bên trái để chỗ cho icon */
+  border-radius: 50px;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.08); /* Background tối, hơi transparent */
+  color: #ccc;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.3s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Thêm đổ bóng nhẹ */
+}
+
+.search-bar input::placeholder {
+  color: rgba(255, 255, 255, 0.5); /* Placeholder màu trắng mờ */
+}
+
+.search-bar input:focus {
+  background-color: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.15);
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  opacity: 0.7;
+  pointer-events: none; /* Cho phép click xuyên qua icon */
+}
+
+
+/* Điều chỉnh menu để giới hạn chiều cao hiển thị ~7-8 mục */
+.sidebar-menu {
+  flex: 1;
+  max-height: calc(100vh - 220px); /* Giới hạn chiều cao, điều chỉnh số này để hiển thị ~7-8 mục */
+  overflow-y: auto;
+  
+  /* Ẩn thanh cuộn */
+  &::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+  }
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.sidebar-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Điều chỉnh kích thước icon - đã di chuyển ra khỏi @media */
+/* Tăng kích thước icon */
+.custom-icon {
+  width: 28px; /* Tăng kích thước từ 20px lên 32px */
+  height: 28px; /* Tăng kích thước từ 20px lên 32px */
+  object-fit: contain;
+} 
+
+/* Chỉnh lại khoảng cách và căn chỉnh trong menu item - đã di chuyển ra khỏi @media */
+.sidebar-menu .menu-item {
+  padding: 12px 16px; /* Tăng padding từ 8px 12px lên 12px 16px */
+  margin-bottom: 6px; /* Tăng từ 4px */
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  border-radius: 10px; /* Tăng độ cong viền */
+}
+
+.menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.15); /* Tăng độ đậm của hiệu ứng hover */
+}
+
+.sidebar-menu .menu-item .icon {
+  width: 36px; /* Tăng từ 24px */
+  height: 36px; /* Tăng từ 24px */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+}
+
+/* Chỉnh style cho text trong menu - đã di chuyển ra khỏi @media */
+.sidebar-menu .menu-item .text {
+  font-size: 16px; /* Tăng từ 14px */
+  white-space: nowrap;
+  font-weight: 500; /* Thêm độ đậm vừa phải */
+}
+
+/* Chỉnh style cho menu item active - đã di chuyển ra khỏi @media */
+.menu-item.active {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-left: 4px solid #8bc34a; /* Thêm viền bên trái để nhấn mạnh mục đang chọn */
+  padding-left: 12px; /* Bù đắp cho border left */
+}
+
+/* Style cho support section */
+.support-section {
+  margin-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1rem;
+}
+
+.support-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 0;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.support-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding-left: 8px;
+}
+
+.support-item .icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-right: 12px;
+}
+
+/* Icon style */
+.support-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+/* Text style - giữ cỡ chữ nhưng đậm hơn */
+.support-item .text {
+  font-size: 16px; /* Giữ nguyên cỡ chữ */
+  font-weight: 600; /* Đậm hơn so với menu-item */
+  color: rgba(255, 255, 255, 0.85); /* Màu sáng hơn một chút để nổi bật */
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  margin-left: 280px;
+  padding: 1.5rem 2rem;
+  color: #fff; /* Chữ màu trắng */
+}
+
+/* Header */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  margin-bottom: 2rem;
+  color: #fff; /* Đảm bảo text màu trắng */
+}
+
+.welcome {
+  font-size: 16px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.header-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-logout {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.1); /* Nền nút hơi trắng trong suốt */
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  color: #fff; /* Chữ màu trắng */
+  padding: 8px 16px;
+  border-radius: 20px;
+  transition: all 0.2s;
+}
+
+.btn-logout:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.header-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+/* Banner chào mừng */
+.banner {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #2a2755 0%, #191f45 100%);
+}
+
+.banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('../../assets/images/banner-bg.png'); /* Nếu bạn có hình nền */
+  background-size: cover;
+  opacity: 0.3;
+  z-index: 1;
+}
+
+.banner-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.banner-text {
+  color: #fff;
+}
+
+.banner-text h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.banner-text p {
+  margin: 0.5rem 0 0;
+  opacity: 0.8;
+}
+
+/* Hiệu ứng float cho hình ảnh trong banner */
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.banner-image {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Hiệu ứng cho các icon 3D nổi */
+.floating-icons {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.floating-icon {
+  position: absolute;
+  animation-name: float-icons;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  animation-duration: calc(25s);
+  z-index: 1;
+}
+
+@keyframes float-icons {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(0, -1000px, 0) rotate(720deg) scale(0.5);
+    opacity: 0;
+  }
+}
+
+/* Favorite Functions */
+.favorite-functions {
+  margin-bottom: 2rem;
+}
+
+/* Card sections - Điều chỉnh màu nền card */
+.favorite-functions h2, 
+.account-info h2, 
+.statistics-section h2, 
+.latest-updates h2 {
+  color: #fff;
+}
+
+.functions-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1.5rem;
+}
+
+.function-card {
+  background: rgba(255, 255, 255, 0.07); /* Card với nền hơi trắng trong suốt */
+  border-radius: 12px;
+  padding: 1.2rem 0.8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.function-card:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-5px);
+}
+
+.function-icon {
+  font-size: 2rem;
+  margin-bottom: 0.8rem;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 50%;
+}
+
+.function-name {
+  font-size: 0.8rem;
+  color: #fff; /* Đảm bảo chữ màu trắng */
+  margin-top: 0.5rem;
+}
+
+/* Dashboard Grid */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* Account Info */
+.account-info, 
+.statistics-section {
+  background: rgba(255, 255, 255, 0.07); /* Nền card hơi trắng trong suốt */
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.account-info, 
+.statistics-section,
+.rewards-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.account-info::before, 
+.statistics-section::before,
+.rewards-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255, 255, 255, 0.05),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: cardShine 3s infinite linear;
+  pointer-events: none;
+}
+
+.account-card {
+  margin-top: 1rem;
+}
+
+.account-details {
+  margin: 1rem 0;
+}
+
+.account-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.8rem;
+  align-items: center;
+}
+
+.balance {
+  display: flex;
+  align-items: center;
+}
+
+.toggle-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  margin-left: 0.5rem;
+}
+
+.copy-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.account-actions {
+  display: flex;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.action-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.7rem;
+  background: #f5f5f5;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.open-account-btn {
+  width: 100%;
+  padding: 0.8rem;
+  background: #e8ffd4;
+  border: none;
+  border-radius: 30px;
+  font-weight: 500;
+  cursor: pointer;
+  margin: 1rem 0;
+}
+
+.card-section {
+  margin-top: 1.5rem;
+}
+
+.credit-card {
+  height: 120px;
+  background: linear-gradient(135deg, #333, #111);
+  border-radius: 12px;
+  margin-top: 1rem;
+  position: relative;
+  overflow: hidden;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.card-info {
+  display: flex;
+  justify-content: space-between;
+  color: white;
+  align-items: flex-end;
+}
+
+@keyframes cardShine {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 200% 0%;
+  }
+}
+
+.progress-bar {
+  height: 300px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  margin: 1rem 0;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+}
+
+.progress {
+  width: 100%;
+  background: linear-gradient(to top, #4caf50, #8bc34a);
+  border-radius: 8px 8px 0 0;
+  transition: height 1s ease-in-out;
+  height: 100%;
+}
+
+.target-percentage {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ff5722;
+  margin: 1rem 0;
+}
+
+.months-grid {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 0;
+  color: #666;
+}
+
+.manage-finance-btn {
+  padding: 0.8rem;
+  background: #e8ffd4;
+  border: none;
+  border-radius: 30px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: auto;
+}
+
+/* Rewards Section */
+.rewards-section {
+  background: linear-gradient(135deg, #8a42f5, #c67ef6);
+  border-radius: 12px;
+  padding: 1.5rem;
+  color: white;
+}
+
+.reward-box {
+  margin-top: 1rem;
+}
+
+.reward-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.reward-icon {
+  font-size: 2rem;
+  margin-right: 1rem;
+}
+
+.reward-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.points-amount {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-top: 0.5rem;
+}
+
+.redeem-points-btn {
+  width: 100%;
+  padding: 0.8rem;
+  background: white;
+  border: none;
+  border-radius: 30px;
+  font-weight: 500;
+  color: #8a42f5;
+  cursor: pointer;
+}
+
+/* Latest Updates */
+.latest-updates {
+  margin-top: 2rem;
+}
+
+/* Thêm hiệu ứng glass cho section */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.view-all-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.promotions-slider {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  padding: 1rem 0;
+}
+
+/* Promo cards */
+.promo-card {
+  min-width: 280px;
+  height: 160px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  position: relative;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.promo-tag {
+  position: absolute;
+  top: 1rem;
+  left: 0;
+  background: #ff5722;
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 0 4px 4px 0;
+  font-size: 0.8rem;
+}
+
+/* Update time section */
+.update-time {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.8rem;
+  border-radius: 50px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.refresh-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Responsive Design - giữ lại, nhưng đã di chuyển các class cần thiết ra khỏi đây */
+@media (max-width: 1200px) {
+  .functions-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 0;
+    padding: 0;
+    position: fixed;
+    z-index: 1000;
+  }
+  
+  .sidebar.open {
+    width: 280px;
+    padding: 1rem;
+  }
+  
+  .main-content {
+    margin-left: 0;
+    padding: 1rem;
+  }
+  
+  .functions-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
