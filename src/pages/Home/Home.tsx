@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import './Home.css';
 import { useNavigate } from 'react-router-dom';
 
-// Import các icon hoặc hình ảnh cần thiết
-// Ví dụ: import { FaHome, FaMoneyBill, FaCreditCard, ... } from 'react-icons/fa';
+import MonthlyBarChart from '../../components/MonthlyBarChart';
 
 import searchIcon from '../../assets/icons/searchIcon.png';
 
@@ -20,14 +19,22 @@ import budgetIcon from '../../assets/icons/home/budgetIcon.png';
 import utilityIcon from '../../assets/icons/home/utilityIcon.png';
 
 
+// Thêm import ảnh thẻ
+import card from '../../assets/images/card.png';
 
 import contactIcon from '../../assets/icons/contactIcon.png';
 import locationIcon from '../../assets/icons/locationIcon.png';
 import emailIcon from '../../assets/icons/emailIcon.png';
 
+import copyIcon from '../../assets/icons/copyIcon.png';
+import showIcon from '../../assets/icons/showIcon.png'; // Icon hiển thị số dư
+import hideIcon from '../../assets/icons/hideIcon.png'; // Icon ẩn số dư
+
 import logoutIcon from '../../assets/icons/logoutIcon.png'; // Icon đăng xuất
 
 import banner from '../../assets/icons/home/banner.jpg'; // Icon đăng xuất
+
+
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
@@ -36,9 +43,18 @@ const Home: React.FC = () => {
 
   // Mock data
   const accountNumber = '1047610982';
-  const rewardPoints = 1000;
   const monthlyTarget = 100; // % hoàn thành
   const userName = 'Nguyễn Văn A'; // Tên người dùng giả định
+
+  // Trong component Home
+  const [monthlyData, setMonthlyData] = useState([
+    { month: 'T12', income: 850000, expense: 650000 },
+    { month: 'T1', income: 900000, expense: 700000 },
+    { month: 'T2', income: 800000, expense: 650000 },
+    { month: 'T3', income: 950000, expense: 820000 },
+    { month: 'T4', income: 870000, expense: 700000 },
+    { month: 'T5', income: 1100000, expense: 750000 }
+  ]);
 
   const toggleShowBalance = () => {
     setShowBalance(!showBalance);
@@ -56,6 +72,13 @@ const Home: React.FC = () => {
     // Chuyển hướng về trang đăng nhập
     navigate('/landing');
   };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(accountNumber);
+    // Có thể thêm một notification nhỏ hoặc thay đổi icon tạm thời để thông báo đã sao chép
+  };
+
+
 
   return (
     <div className="banking-app">
@@ -165,7 +188,7 @@ const Home: React.FC = () => {
 
       {/* Main Content */}
       <div className="main-content">
-        {/* Header */}
+        {/* Header - đã cập nhật */}
         <header className="app-header">
           <div className="welcome">Xin chào, {userName}</div>
           <div className="header-actions">
@@ -176,83 +199,53 @@ const Home: React.FC = () => {
           </div>
         </header>
 
-        {/* Banner chào mừng */}
+        {/* Banner chào mừng - đơn giản hóa chỉ giữ lại hình nền */}
         <div className="banner">
-          <img src={banner}/>
+          <img src={banner} alt="Banner chào mừng" />
           <div className="banner-content">
             <div className="banner-text">
-              <h3>Chúc Quý khách một ngày mới tốt lành!</h3>
-              <p>TRẦN KHẮC HỒNG ĐỨC</p>
-            </div>
-            <div className="banner-image">
-              <img src="/assets/images/emoji-cool.png" alt="Cool Emoji" width="120" />
+              <h3>Chúc Quý khách một ngày mới tốt lành!</h3>  
             </div>
           </div>
-          <button className="btn-customize">
-            <span className="icon-customize"></span>
-            Tùy chỉnh
-          </button>
         </div>
 
-        {/* Favorite Functions */}
-        <section className="favorite-functions">
-          <h2>Chức năng ưa thích</h2>
-          <div className="functions-grid">
-            <div className="function-card">
-              <div className="function-icon">📱</div>
-              <div className="function-name">Nạp Data 4G/5G</div>
-            </div>
-            <div className="function-card">
-              <div className="function-icon">💸</div>
-              <div className="function-name">Chuyển tiền trong nước</div>
-            </div>
-            <div className="function-card">
-              <div className="function-icon">👥</div>
-              <div className="function-name">Quản lý nhóm</div>
-            </div>
-            <div className="function-card">
-              <div className="function-icon">💰</div>
-              <div className="function-name">Nạp tiền ví điện tử</div>
-            </div>
-            <div className="function-card">
-              <div className="function-icon">📱</div>
-              <div className="function-name">Nạp tiền điện thoại</div>
-            </div>
-            <div className="function-card">
-              <div className="function-icon">🔑</div>
-              <div className="function-name">Mở tài khoản chứng khoán</div>
-            </div>
-          </div>
-        </section>
+         
 
-        {/* Account Information */}
+        {/* Dashboard Grid - Đã loại bỏ phần reward */}
         <div className="dashboard-grid">
+          {/* Account Information - Giữ nguyên */}
           <section className="account-info">
             <h2>Tài khoản thanh toán</h2>
             <div className="account-card">
-              <h3>Tài khoản mặc định</h3>
               <div className="account-details">
                 <div className="account-row">
                   <span>Số tài khoản</span>
-                  <span>{accountNumber} <button className="copy-btn">📋</button></span>
+                  <span>
+                    {accountNumber} 
+                    <button className="copy-btn" onClick={copyToClipboard}>
+                      <img src={copyIcon} alt="Copy" className="action-icon" />
+                    </button>
+                  </span>
                 </div>
                 <div className="account-row">
                   <span>Số dư</span>
                   <span className="balance">
                     {accountBalance} VND 
                     <button className="toggle-btn" onClick={toggleShowBalance}>
-                      👁️
+                      <img 
+                        src={showBalance ? showIcon : hideIcon} 
+                        alt={showBalance ? "Ẩn số dư" : "Hiện số dư"} 
+                        className="action-icon"
+                      />
                     </button>
                   </span>
                 </div>
               </div>
               <div className="account-actions">
                 <button className="action-btn">
-                  <span className="icon">📜</span>
                   <span>Lịch sử giao dịch</span>
                 </button>
                 <button className="action-btn">
-                  <span className="icon">💳</span>
                   <span>Tài khoản & Thẻ</span>
                 </button>
               </div>
@@ -260,10 +253,24 @@ const Home: React.FC = () => {
               <div className="card-section">
                 <h3>Thẻ ghi nợ/Thẻ tín dụng</h3>
                 <div className="credit-card">
-                  {/* Hình ảnh thẻ tín dụng */}
-                  <div className="card-info">
-                    <span className="card-type">VISA</span>
-                    <span className="card-expiry">Miễn lãi 45 ngày</span>
+                  {/* Sử dụng ảnh làm background */}
+                  <img src={card} alt="VISA Card" className="card-background" />
+                  
+                  {/* Thông tin thẻ */}
+                  <div className="card-overlay">
+                    <div className="card-chip"></div>
+                    <div className="card-number">**** **** **** 1234</div>
+                    <div className="card-info">
+                      <div className="card-holder">
+                        <div className="card-label">CARDHOLDER</div>
+                        <div className="card-name">{userName}</div>
+                      </div>
+                      <div className="card-expiry">
+                        <div className="card-label">EXPIRES</div>
+                        <div>05/28</div>
+                      </div>
+                      <div className="card-type">VISA</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -272,40 +279,45 @@ const Home: React.FC = () => {
 
           {/* Statistics Section */}
           <section className="statistics-section">
-            <h2>Chỉ tiêu so với tháng 04</h2>
-            <div className="progress-bar">
-              <div className="progress" style={{ width: `${monthlyTarget}%` }}></div>
+            {/* Header với tiêu đề và phần trăm nằm trên cùng một hàng */}
+            <div className="stats-header">
+              <h1>Chi tiêu so với tháng 04</h1>
+              {/* Hiển thị phần trăm động dựa trên sự so sánh */}
+              {(() => {
+                // Lấy dữ liệu tháng hiện tại và tháng trước
+                // const currentMonthData = monthlyData[monthlyData.length - 1];
+                // const currentMonthData = monthlyData[monthlyData.length - 2];
+                // giả sử
+                const currentMonthData = monthlyData.find(item => item.month === 'T5');
+                const previousMonthData = monthlyData.find(item => item.month === 'T4');
+                
+                if (!currentMonthData || !previousMonthData) {
+                  return <div className="target-indicator">Dữ liệu không khả dụng</div>;
+                }
+                // Tính tỉ lệ chi tiêu so với tháng trước
+                const ratio = Math.round((currentMonthData.expense / previousMonthData.expense) * 100);
+                
+                // Xác định hướng mũi tên và màu sắc
+                const isIncrease = currentMonthData.expense > previousMonthData.expense;
+                const arrowDirection = isIncrease ? '↑' : '↓';
+                const colorClass = isIncrease ? 'increase' : 'decrease';
+                
+                return (
+                  <div className={`target-indicator ${colorClass}`}>
+                    <span className="arrow">{arrowDirection}</span>
+                    <span className="percentage">{ratio} %</span>
+                  </div>
+                );
+              })()}
             </div>
-            <div className="target-percentage">
-              <span>↑ {monthlyTarget} %</span>
-            </div>
-            <div className="months-grid">
-              <span>T12</span>
-              <span>T1</span>
-              <span>T2</span>
-              <span>T3</span>
-              <span>T4</span>
-              <span>T5</span>
-            </div>
+              <MonthlyBarChart data={monthlyData} />
+            
+            
+            
             <button className="manage-finance-btn">Quản lý tài chính cá nhân</button>
           </section>
 
-          {/* Rewards Section */}
-          <section className="rewards-section">
-            <h2>VCB Rewards</h2>
-            <div className="reward-box">
-              <div className="reward-header">
-                <span className="reward-icon">🎁</span>
-                <div className="reward-info">
-                  <span>Điểm tích lũy</span>
-                  <span className="points-amount">1,000</span>
-                </div>
-              </div>
-              <button className="redeem-points-btn">Đổi điểm ngay</button>
-            </div>
-          </section>
         </div>
-
         {/* Latest Updates */}
         <section className="latest-updates">
           <div className="section-header">

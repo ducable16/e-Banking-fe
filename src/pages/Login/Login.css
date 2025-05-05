@@ -87,11 +87,7 @@
 }
 
 input[type="password"] + .password-toggle {
-<<<<<<< HEAD
   background-image: url('../../assets/icons/show_password.png');
-=======
-  background-image: url('../../assets/images/icons/show_password.png');
->>>>>>> origin/main
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -99,11 +95,7 @@ input[type="password"] + .password-toggle {
 
 /* Icon khi mật khẩu đang hiển thị */
 input[type="text"] + .password-toggle {
-<<<<<<< HEAD
   background-image: url('../../assets/icons/hide_password.png');
-=======
-  background-image: url('../../assets/images/icons/hide_password.png');
->>>>>>> origin/main
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;

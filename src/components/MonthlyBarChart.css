@@ -1,0 +1,165 @@
+/* CSS cập nhật để giống với mẫu */
+.monthly-chart {
+  display: flex;
+  justify-content: space-between;
+  height: 100px;
+  margin: 20px 0;
+  position: relative;
+}
+
+.chart-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: calc(100% / 6);
+  position: relative;
+}
+
+.bar-container {
+  width: 20px;
+  height: 80px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  cursor: pointer;
+}
+
+.expense-bar, .income-bar {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  border-radius: 2px;
+  transition: all 0.2s ease;
+}
+
+.income-bar {
+  background-color: #9b6dff; /* Màu tím cho thu nhập */
+}
+
+.expense-bar {
+  background-color: #4cd964; /* Màu xanh cho chi tiêu */
+  z-index: 2;
+}
+
+.month-label {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #6c757d;
+}
+
+/* Thiết kế tooltip */
+.chart-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  color: white;
+  white-space: nowrap;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.2s ease-in-out;
+  margin-bottom: 10px;
+  min-width: 110px;
+}
+
+.income-tooltip {
+  background-color: #9b6dff;
+}
+
+.expense-tooltip {
+  background-color: #4cd964;
+}
+
+.tooltip-content {
+  text-align: center;
+}
+
+/* Mũi tên tooltip */
+.tooltip-arrow {
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+}
+
+.income-tooltip .tooltip-arrow {
+  border-top: 6px solid #9b6dff;
+}
+
+.expense-tooltip .tooltip-arrow {
+  border-top: 6px solid #4cd964;
+}
+
+/* Animation cho tooltip */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Hiệu ứng hover */
+.expense-bar:hover, .income-bar:hover {
+  opacity: 1 !important;
+  filter: brightness(1.1);
+}
+
+/* Tooltip cho tháng hiện tại (T5) */
+.current-month-tooltip {
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 4px;
+  padding: 5px 10px;
+  z-index: 5;
+  display: none;
+}
+
+.tooltip-month {
+  text-align: center;
+  margin-bottom: 3px;
+}
+
+.month-value {
+  font-weight: bold;
+  color: #fff;
+  font-size: 12px;
+}
+
+.tooltip-values {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.income-value, .expense-value {
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.income-value {
+  color: #9b6dff;
+}
+
+.expense-value {
+  color: #4cd964;
+}
+
+/* Hiển thị tooltip tháng hiện tại khi hover vào cột */
+.chart-column:hover .current-month-tooltip {
+  display: block;
+}
