@@ -20,7 +20,8 @@ import utilityIcon from '../../assets/icons/home/utilityIcon.png';
 
 
 // Thêm import ảnh thẻ
-import card from '../../assets/images/card.png';
+import card_1 from '../../assets/images/card_1.png';
+import CreditCard from '../../components/CreditCard';
 
 import contactIcon from '../../assets/icons/contactIcon.png';
 import locationIcon from '../../assets/icons/locationIcon.png';
@@ -76,6 +77,14 @@ const Home: React.FC = () => {
   const copyToClipboard = () => {
     navigator.clipboard.writeText(accountNumber);
     // Có thể thêm một notification nhỏ hoặc thay đổi icon tạm thời để thông báo đã sao chép
+  };
+
+  const cardInfo = {
+    cardNumber: '1234567890123456',
+    cardholderName: userName,
+    expiryDate: '05/28',
+    cardType: 'VISA' as const,
+    promotion: 'Miễn lãi 45 ngày'
   };
 
 
@@ -252,27 +261,17 @@ const Home: React.FC = () => {
               <button className="open-account-btn">Mở tài khoản số chọn</button>
               <div className="card-section">
                 <h3>Thẻ ghi nợ/Thẻ tín dụng</h3>
-                <div className="credit-card">
-                  {/* Sử dụng ảnh làm background */}
-                  <img src={card} alt="VISA Card" className="card-background" />
-                  
-                  {/* Thông tin thẻ */}
-                  <div className="card-overlay">
-                    <div className="card-chip"></div>
-                    <div className="card-number">**** **** **** 1234</div>
-                    <div className="card-info">
-                      <div className="card-holder">
-                        <div className="card-label">CARDHOLDER</div>
-                        <div className="card-name">{userName}</div>
-                      </div>
-                      <div className="card-expiry">
-                        <div className="card-label">EXPIRES</div>
-                        <div>05/28</div>
-                      </div>
-                      <div className="card-type">VISA</div>
-                    </div>
-                  </div>
-                </div>
+                
+                {/* Sử dụng component CreditCard */}
+                <CreditCard 
+                  cardNumber={cardInfo.cardNumber}
+                  cardholderName={cardInfo.cardholderName}
+                  expiryDate={cardInfo.expiryDate}
+                  cardType={cardInfo.cardType}
+                  promotion={cardInfo.promotion}
+                  isHiddenNumber={true}
+                  useRandomGradient={true} // Bật tính năng gradient ngẫu nhiên
+                />
               </div>
             </div>
           </section>

@@ -1,0 +1,219 @@
+/* Styling cho thẻ tín dụng */
+.credit-card {
+  aspect-ratio: 1.585; /* 85.60/53.98 */
+  width: 100%;
+  max-width: 360px; /* Giới hạn kích thước tối đa */
+  height: auto;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin: 10px auto 0; /* Đây là cách căn giữa thẻ */
+}
+
+/* Background ảnh thẻ */
+.card-background {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+/* Phần overlay chứa thông tin thẻ */
+.card-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+  box-sizing: border-box;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Phân chia overlay thành 3 phần cố định */
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 40px;
+}
+
+.card-number {
+  font-size: 18px;
+  letter-spacing: 2px;
+  height: 30px;
+  margin-top: 20px;
+  font-family: monospace;
+}
+
+.card-bottom {
+  margin-top: auto; /* Đẩy xuống cuối */
+  height: 60px;
+}
+
+/* Chip thẻ */
+.card-chip {
+  width: 40px;
+  height: 30px;
+  background: linear-gradient(135deg, #c0c0c0, #f0f0f0);
+  border-radius: 5px;
+}
+
+/* Logo thẻ */
+.card-logo {
+  font-size: 22px;
+  font-weight: bold;
+  font-family: 'Arial', sans-serif;
+  letter-spacing: 1px;
+}
+
+/* Sử dụng grid để cố định vị trí các thông tin */
+.card-info-grid {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  width: 100%;
+}
+
+.card-holder-area {
+  grid-column: 1;
+}
+
+.card-expiry-area {
+  grid-column: 2;
+  padding-left: 10px;
+}
+
+.card-label {
+  font-size: 10px;
+  opacity: 0.8;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.card-name {
+  font-size: 14px;
+  text-transform: uppercase;
+}
+
+/* Thông tin khuyến mãi */
+.card-promotion {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  z-index: 4;
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+/* Hiệu ứng ánh kim đặc trưng */
+.credit-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-30deg);
+  animation: shimmer 4s infinite;
+  z-index: 3;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+/* Hiệu ứng hover */
+.credit-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* Màu nền mặc định cho từng loại thẻ */
+.credit-card.visa {
+  background: linear-gradient(135deg, #0f509e, #1a237e);
+}
+
+.credit-card.mastercard {
+  background: linear-gradient(135deg, #f44336, #ff9800);
+}
+
+.credit-card.jcb {
+  background: linear-gradient(135deg, #006bc8, #00a885);
+}
+
+/* Đảm bảo kích thước phù hợp trên màn hình nhỏ */
+@media (max-width: 400px) {
+  .card-number {
+    font-size: 16px;
+  }
+  
+  .card-name {
+    font-size: 12px;
+  }
+  
+  .card-label {
+    font-size: 8px;
+  }
+}
+/* Thêm class cho gradient tùy chỉnh */
+.credit-card.custom-gradient {
+  /* Không cần định nghĩa background ở đây vì sẽ áp dụng qua style inline */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Style vẫn giữ cho thẻ khi có nền trong suốt */
+.credit-card.custom-gradient .card-overlay {
+  background: rgba(0, 0, 0, 0.15); /* Lớp overlay mờ để đảm bảo text dễ đọc */
+}
+
+/* Hiệu ứng shimmer đặc biệt cho các thẻ gradient */
+.credit-card.custom-gradient::before {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(30deg);
+  animation: shimmer-custom 6s infinite;
+  z-index: 2;
+}
+
+@keyframes shimmer-custom {
+  0% {
+    transform: rotate(30deg) translateY(-100%);
+  }
+  100% {
+    transform: rotate(30deg) translateY(100%);
+  }
+}
