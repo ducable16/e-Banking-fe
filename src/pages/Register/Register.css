@@ -182,3 +182,62 @@
   }
 
 }
+.email-instruction {
+  margin-bottom: 24px;
+  color: #cdd1da;
+  font-size: 16px;
+  line-height: 1.5;
+  text-align: center;
+  padding: 0 15px;
+}
+
+.email-instruction strong {
+  font-weight: 600;
+  color: #2d3748;
+}
+
+/* Cũng nên thêm style cho class otp-instruction tương tự */
+.otp-instruction {
+  margin-bottom: 24px;
+  color: #4a5568;
+  font-size: 16px;
+  line-height: 1.5;
+  text-align: center;
+  padding: 0 15px;
+}
+
+.otp-instruction strong {
+  font-weight: 600;
+  color: #2d3748;
+}
+
+/* Style cho input OTP */
+.otp-input-group {
+  margin-bottom: 15px;
+}
+
+.otp-input {
+  font-size: 18px;
+  letter-spacing: 4px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Style cho khu vực gửi lại OTP */
+.resend-otp {
+  margin-bottom: 20px;
+  font-size: 14px;
+  text-align: center;
+  color: #718096;
+}
+
+.resend-otp a {
+  color: #4299e1;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.resend-otp a:hover {
+  text-decoration: underline;
+  color: #3182ce;
+}
