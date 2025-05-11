@@ -5,26 +5,23 @@ import './Register.css';
 import { publicRequest } from '../../services/AxiosInstance';
 
 interface RegisterData {
-  username: string;
   password: string;
   confirmPassword: string;
   email: string;
   fullName: string;
-  phoneNumber: string; // Thêm trường số điện thoại
-  address: string;     // Thêm trường địa chỉ
-  // Thêm các trường khác nếu cần
+  phoneNumber: string;
+  address: string;
 }
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<RegisterData>({
-    username: '',
     password: '',
     confirmPassword: '',
     email: '',
     fullName: '',
-    phoneNumber: '',  // Khởi tạo giá trị rỗng cho số điện thoại
-    address: '',      // Khởi tạo giá trị rỗng cho địa chỉ
+    phoneNumber: '',
+    address: '',
   });
   const [error, setError] = useState<string>('');
   const [step, setStep] = useState<number>(1); // Bước 1: Nhập email, Bước 2: Xác thực OTP và điền thông tin
@@ -79,7 +76,7 @@ const Register: React.FC = () => {
     }
     
     // Kiểm tra các trường bắt buộc
-    if (!formData.username || !formData.password || !formData.email || !formData.fullName || !formData.phoneNumber || !formData.address) {
+    if (!formData.password || !formData.email || !formData.fullName || !formData.phoneNumber || !formData.address) {
       setError('Vui lòng điền đầy đủ thông tin');
       return false;
     }
@@ -125,12 +122,13 @@ const Register: React.FC = () => {
     try {
       setLoading(true);
 
-      await publicRequest.post('/auth/register', {
-        ...formData,
+      const { confirmPassword, ...registrationData } = formData;
+      await publicRequest.post('/auth/signup-otp', {
+        ...registrationData,
         otp,
       });
 
-      navigate('/', { state: { message: 'Đăng ký thành công! Vui lòng đăng nhập.' } });
+      navigate('/login', { state: { message: 'Đăng ký thành công! Vui lòng đăng nhập.' } });
     } catch (err: any) {
       setError(err.message || 'Đăng ký không thành công');
     } finally {
@@ -233,17 +231,6 @@ const Register: React.FC = () => {
                 name="fullName"
                 placeholder="Họ và tên"
                 value={formData.fullName}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            
-            <div className="form-group">
-              <input
-                type="text"
-                name="username"
-                placeholder="Tên đăng nhập"
-                value={formData.username}
                 onChange={handleChange}
                 required
               />

@@ -1,0 +1,118 @@
+.transfer-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(120deg, #e0eafc 0%, #cfdef3 100%);
+}
+
+.transfer-content {
+  background: #fff;
+  padding: 32px 28px;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  min-width: 340px;
+  max-width: 400px;
+  width: 100%;
+}
+
+.transfer-content h2 {
+  text-align: center;
+  margin-bottom: 28px;
+  color: #2d3748;
+}
+
+.transfer-form .form-group {
+  margin-bottom: 18px;
+}
+
+.transfer-form label {
+  display: block;
+  margin-bottom: 6px;
+  color: #4a5568;
+  font-weight: 500;
+}
+
+.transfer-form input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #cbd5e0;
+  border-radius: 8px;
+  font-size: 16px;
+  outline: none;
+  transition: border 0.2s;
+  background: #f7fafc;
+}
+
+.transfer-form input:focus {
+  border-color: #67a929;
+  background: #fff;
+}
+
+.transfer-btn {
+  width: 100%;
+  padding: 14px;
+  background: #67a929;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.transfer-btn:disabled {
+  background: #b5c99a;
+  cursor: not-allowed;
+}
+
+.transfer-btn:hover:not(:disabled) {
+  background: #578d23;
+}
+
+.back-btn {
+  width: 100%;
+  padding: 12px;
+  background: #e2e8f0;
+  color: #2d3748;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.back-btn:hover {
+  background: #cbd5e0;
+}
+
+.error-message {
+  color: #e53e3e;
+  background: #fff5f5;
+  border: 1px solid #feb2b2;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.success-message {
+  color: #38a169;
+  background: #f0fff4;
+  border: 1px solid #9ae6b4;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+@media (max-width: 500px) {
+  .transfer-content {
+    min-width: 0;
+    padding: 18px 6px;
+  }
+} 

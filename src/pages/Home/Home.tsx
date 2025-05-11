@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Home.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -20,7 +20,6 @@ import utilityIcon from '../../assets/icons/home/utilityIcon.png';
 
 
 // Thêm import ảnh thẻ
-import card_1 from '../../assets/images/card_1.png';
 import CreditCard from '../../components/CreditCard';
 
 import contactIcon from '../../assets/icons/contactIcon.png';
@@ -35,17 +34,20 @@ import logoutIcon from '../../assets/icons/logoutIcon.png'; // Icon đăng xuấ
 
 import banner from '../../assets/icons/home/banner.jpg'; // Icon đăng xuất
 
+import axiosInstance from '../../services/AxiosInstance';
+import Transfer from '../Transfer/Transfer';
+import TransferForm from '../Transfer/Transfer';
+
 
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
   const [accountBalance, setAccountBalance] = useState<string>('***');
   const [showBalance, setShowBalance] = useState<boolean>(false);
-
-  // Mock data
-  const accountNumber = '1047610982';
-  const monthlyTarget = 100; // % hoàn thành
-  const userName = 'Nguyễn Văn A'; // Tên người dùng giả định
+  const [accountNumber, setAccountNumber] = useState<string>('');
+  const [fullName, setFullName] = useState<string>('');
+  const [loadingProfile, setLoadingProfile] = useState<boolean>(true);
+  const [showTransferForm, setShowTransferForm] = useState<boolean>(false);
 
   // Trong component Home
   const [monthlyData, setMonthlyData] = useState([
@@ -57,14 +59,29 @@ const Home: React.FC = () => {
     { month: 'T5', income: 1100000, expense: 750000 }
   ]);
 
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        setLoadingProfile(true);
+        const profile = await axiosInstance.get('/user/profile') as any;
+        setFullName(profile.fullName || '');
+        setAccountNumber(profile.account || '');
+        setAccountBalance(showBalance ? (profile.balance?.toLocaleString?.() || '0') : '***');
+      } catch (err) {
+        setFullName('Không xác định');
+        setAccountNumber('');
+        setAccountBalance('***');
+      } finally {
+        setLoadingProfile(false);
+      }
+    };
+    fetchProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showBalance]);
+
   const toggleShowBalance = () => {
     setShowBalance(!showBalance);
-    // Giả định dữ liệu số dư
-    if (!showBalance) {
-      setAccountBalance('10,000,000');
-    } else {
-      setAccountBalance('***');
-    }
+    // Khi showBalance thay đổi, useEffect sẽ tự gọi lại fetchProfile để cập nhật số dư
   };
 
   const handleLogout = () => {
@@ -81,7 +98,7 @@ const Home: React.FC = () => {
 
   const cardInfo = {
     cardNumber: '1234567890123456',
-    cardholderName: userName,
+    cardholderName: fullName,
     expiryDate: '05/28',
     cardType: 'VISA' as const,
     promotion: 'Miễn lãi 45 ngày'
@@ -103,13 +120,13 @@ const Home: React.FC = () => {
         <nav className="sidebar-menu">
           <ul>
             {/* Ba mục đầu tiên */}
-            <li className="menu-item">
+            <li className="menu-item" onClick={() => { setShowTransferForm(false); }} style={{cursor: 'pointer'}}>
               <span className="icon">
                 <img src={homeIcon} alt="Trang chủ" className="custom-icon" />
               </span>
               <span className="text">Trang chủ</span>
             </li>
-            <li className="menu-item">
+            <li className="menu-item" onClick={() => setShowTransferForm(true)} style={{cursor: 'pointer'}}>
               <span className="icon">
                 <img src={transferIcon} alt="Chuyển tiền" className="custom-icon" />
               </span>
@@ -199,7 +216,7 @@ const Home: React.FC = () => {
       <div className="main-content">
         {/* Header - đã cập nhật */}
         <header className="app-header">
-          <div className="welcome">Xin chào, {userName}</div>
+          <div className="welcome">Xin chào, {fullName}</div>
           <div className="header-actions">
             <button className="btn-logout" onClick={handleLogout}>
               <img src={logoutIcon} alt="Đăng xuất" className="header-icon" />
@@ -218,8 +235,11 @@ const Home: React.FC = () => {
           </div>
         </div>
 
-         
-
+        {/* Main content: chuyển tiền hoặc dashboard */}
+        {showTransferForm ? (
+          <TransferForm onBack={() => setShowTransferForm(false)} />
+        ) : (
+        <>
         {/* Dashboard Grid - Đã loại bỏ phần reward */}
         <div className="dashboard-grid">
           {/* Account Information - Giữ nguyên */}
@@ -337,6 +357,8 @@ const Home: React.FC = () => {
           <span>Cập nhật: 19.54 - 31/05/2025</span>
           <button className="refresh-btn">🔄</button>
         </div>
+        </>
+        )}
       </div>
     </div>
   );

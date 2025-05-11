@@ -1,23 +1,41 @@
 import React, { useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../../api/authApi';
+import { publicRequest } from '../../services/AxiosInstance';
 import './Login.css';
 
 // Định nghĩa interface cho dữ liệu đăng nhập
 interface Credentials {
-  username: string;
+  email: string;
   password: string;
+}
+
+interface ApiResponse<T> {
+  status: number;
+  success: boolean;
+  message: string;
+  data: T | null;
+  errorCode: string | null;
+}
+
+interface LoginData {
+  accessToken: string;
+  user: {
+    id: number;
+    email: string;
+    role: string;
+  };
 }
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const [credentials, setCredentials] = useState<Credentials>({
-    username: '',
+    email: '',
     password: '',
   });
   const [error, setError] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const goToRegister = (): void => {
     navigate('/register');
@@ -39,21 +57,25 @@ const Login: React.FC = () => {
     e.preventDefault();
     setError('');
 
-    if (!credentials.username || !credentials.password) {
-      setError('Vui lòng nhập tên đăng nhập và mật khẩu');
+    if (!credentials.email || !credentials.password) {
+      setError('Vui lòng nhập email và mật khẩu');
       return;
     }
 
     try {
-      const res = await login(credentials);
+      setLoading(true);
+      const data = await publicRequest.post<LoginData>('/auth/login', credentials) as unknown as LoginData;
 
-      // Lưu token vào localStorage hoặc cookie
-      localStorage.setItem('token', res.token);
-
-      // Điều hướng sang trang chính
-      navigate('/home');
-    } catch (err) {
-      setError('Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.');
+      if (data && data.accessToken) {
+        localStorage.setItem('token', data.accessToken);
+        navigate('/home');
+      } else {
+        setError('Đăng nhập thành công nhưng không nhận được accessToken!');
+      }
+    } catch (err: any) {
+      setError(err.message || 'Đăng nhập thất bại. Vui lòng thử lại sau.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -70,12 +92,13 @@ const Login: React.FC = () => {
         <form onSubmit={handleSubmit} className="modern-login-form">
           <div className="form-group">
             <input
-              type="text"
-              id="username"
-              name="username"
-              placeholder="Tên đăng nhập"
-              value={credentials.username}
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Email"
+              value={credentials.email}
               onChange={handleChange}
+              required
             />
           </div>
           
@@ -89,6 +112,7 @@ const Login: React.FC = () => {
               maxLength={30}
               onChange={handleChange}
               className="password-input"
+              required
             />
             <span
               className="password-toggle"
@@ -96,7 +120,13 @@ const Login: React.FC = () => {
             ></span>
           </div>
           
-          <button type="submit" className="login-button">Đăng nhập</button>
+          <button 
+            type="submit" 
+            className="login-button"
+            disabled={loading}
+          >
+            {loading ? 'Đang xử lý...' : 'Đăng nhập'}
+          </button>
           
           <div className="links-container">
             <a
