@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { data, useNavigate } from 'react-router-dom';
 import { publicRequest } from '../../services/AxiosInstance';
 import './Login.css';
 
@@ -20,11 +20,6 @@ interface ApiResponse<T> {
 
 interface LoginData {
   accessToken: string;
-  user: {
-    id: number;
-    email: string;
-    role: string;
-  };
 }
 
 const Login: React.FC = () => {
@@ -64,8 +59,8 @@ const Login: React.FC = () => {
 
     try {
       setLoading(true);
-      const data = await publicRequest.post<LoginData>('/auth/login', credentials) as unknown as LoginData;
-
+      const res = await publicRequest.post<LoginData>('/auth/login', credentials);
+      const data = res.data;
       if (data && data.accessToken) {
         localStorage.setItem('token', data.accessToken);
         navigate('/home');

@@ -19,10 +19,12 @@ const MonthlyBarChart: React.FC<MonthlyBarChartProps> = ({ data }) => {
   const maxHeight = 80; // px
 
   // Tính tỷ lệ tăng/giảm giữa tháng hiện tại và tháng trước
-  const currentMonth = data[data.length - 1];
-  const previousMonth = data[data.length - 2];
-  const expenseRatio = currentMonth.expense / previousMonth.expense;
-  const isExpenseIncrease = expenseRatio > 1;
+  let expenseRatio = 1;
+  let isExpenseIncrease = false;
+  if (data.length >= 2 && data[data.length - 2].expense > 0) {
+    expenseRatio = data[data.length - 1].expense / data[data.length - 2].expense;
+    isExpenseIncrease = expenseRatio > 1;
+  }
 
   // Format số tiền theo định dạng tiền tệ Việt Nam
   const formatCurrency = (value: number): string => {

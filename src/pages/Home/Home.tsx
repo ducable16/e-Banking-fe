@@ -37,6 +37,7 @@ import banner from '../../assets/icons/home/banner.jpg'; // Icon đăng xuất
 import axiosInstance from '../../services/AxiosInstance';
 import Transfer from '../Transfer/Transfer';
 import TransferForm from '../Transfer/Transfer';
+import TransactionHistory from '../TransactionHistory/TransactionHistory';
 
 
 
@@ -48,6 +49,7 @@ const Home: React.FC = () => {
   const [fullName, setFullName] = useState<string>('');
   const [loadingProfile, setLoadingProfile] = useState<boolean>(true);
   const [showTransferForm, setShowTransferForm] = useState<boolean>(false);
+  const [showTransactionHistory, setShowTransactionHistory] = useState<boolean>(false);
 
   // Trong component Home
   const [monthlyData, setMonthlyData] = useState([
@@ -63,14 +65,15 @@ const Home: React.FC = () => {
     const fetchProfile = async () => {
       try {
         setLoadingProfile(true);
-        const profile = await axiosInstance.get('/user/profile') as any;
-        setFullName(profile.fullName || '');
+        const response = await axiosInstance.get('/user/profile') as any;
+        const profile = response.data;
         setAccountNumber(profile.account || '');
         setAccountBalance(showBalance ? (profile.balance?.toLocaleString?.() || '0') : '***');
+        setFullName(profile.fullName || '');
       } catch (err) {
-        setFullName('Không xác định');
-        setAccountNumber('');
+        setAccountNumber('Không xác định');
         setAccountBalance('***');
+        setFullName('Không xác định');
       } finally {
         setLoadingProfile(false);
       }
@@ -78,6 +81,28 @@ const Home: React.FC = () => {
     fetchProfile();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showBalance]);
+
+  useEffect(() => {
+    const fetchMonthlyData = async () => {
+      try {
+        const response = await axiosInstance.get('/transaction/summary/last-5-months') as any;
+        const res = response.data;
+        // Map dữ liệu trả về thành format cho MonthlyBarChart
+        const data = Array.isArray(res)
+          ? res.map((item: any) => ({
+              month: 'T' + (new Date(item.month).getMonth() + 1),
+              income: item.totalReceived,
+              expense: item.totalSent,
+            }))
+          : [];
+        console.log('monthlyData:', data);
+        setMonthlyData(data);
+      } catch (err) {
+        // fallback: giữ nguyên dữ liệu cũ nếu lỗi
+      }
+    };
+    fetchMonthlyData();
+  }, []);
 
   const toggleShowBalance = () => {
     setShowBalance(!showBalance);
@@ -120,13 +145,13 @@ const Home: React.FC = () => {
         <nav className="sidebar-menu">
           <ul>
             {/* Ba mục đầu tiên */}
-            <li className="menu-item" onClick={() => { setShowTransferForm(false); }} style={{cursor: 'pointer'}}>
+            <li className="menu-item" onClick={() => { setShowTransferForm(false); setShowTransactionHistory(false); }} style={{cursor: 'pointer'}}>
               <span className="icon">
                 <img src={homeIcon} alt="Trang chủ" className="custom-icon" />
               </span>
               <span className="text">Trang chủ</span>
             </li>
-            <li className="menu-item" onClick={() => setShowTransferForm(true)} style={{cursor: 'pointer'}}>
+            <li className="menu-item" onClick={() => { setShowTransferForm(true); setShowTransactionHistory(false); }} style={{cursor: 'pointer'}}>
               <span className="icon">
                 <img src={transferIcon} alt="Chuyển tiền" className="custom-icon" />
               </span>
@@ -226,18 +251,22 @@ const Home: React.FC = () => {
         </header>
 
         {/* Banner chào mừng - đơn giản hóa chỉ giữ lại hình nền */}
-        <div className="banner">
-          <img src={banner} alt="Banner chào mừng" />
-          <div className="banner-content">
-            <div className="banner-text">
-              <h3>Chúc Quý khách một ngày mới tốt lành!</h3>  
+        {!showTransferForm && !showTransactionHistory && (
+          <div className="banner">
+            <img src={banner} alt="Banner chào mừng" />
+            <div className="banner-content">
+              <div className="banner-text">
+                <h3>Chúc Quý khách một ngày mới tốt lành!</h3>  
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
-        {/* Main content: chuyển tiền hoặc dashboard */}
+        {/* Main content: chuyển tiền, lịch sử giao dịch hoặc dashboard */}
         {showTransferForm ? (
-          <TransferForm onBack={() => setShowTransferForm(false)} />
+          <div className="transfer-form-center"><TransferForm onBack={() => setShowTransferForm(false)} /></div>
+        ) : showTransactionHistory ? (
+          <div className="transfer-form-center"><TransactionHistory onBack={() => setShowTransactionHistory(false)} /></div>
         ) : (
         <>
         {/* Dashboard Grid - Đã loại bỏ phần reward */}
@@ -271,7 +300,7 @@ const Home: React.FC = () => {
                 </div>
               </div>
               <div className="account-actions">
-                <button className="action-btn">
+                <button className="action-btn" onClick={() => { setShowTransactionHistory(true); setShowTransferForm(false); }}>
                   <span>Lịch sử giao dịch</span>
                 </button>
                 <button className="action-btn">

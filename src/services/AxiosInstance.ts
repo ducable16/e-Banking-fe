@@ -49,7 +49,7 @@ axiosInstance.interceptors.response.use(
       });
     }
 
-    return res.data; // Trả ra data nếu thành công
+    return res; // Trả ra data nếu thành công
   },
 
   // ✅ Trường hợp HTTP status khác 2xx nhưng vẫn có body

@@ -1,0 +1,112 @@
+/* Transaction History Styles */
+.transaction-history-content {
+  background: linear-gradient(135deg, #232946 0%, #2d3748 100%);
+  border-radius: 22px;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.18);
+  min-width: 400px;
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 40px 32px 32px 32px;
+  color: #fff;
+  animation: fadeInBill 0.5s;
+}
+
+.transaction-history-title {
+  text-align: center;
+  color: #8cde4a;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 32px;
+}
+
+.transaction-history-loading,
+.transaction-history-error,
+.transaction-history-empty {
+  text-align: center;
+  color: #b5ff7d;
+  font-size: 1.1rem;
+  margin: 18px 0;
+}
+
+.transaction-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.transaction-history-item {
+  background: linear-gradient(120deg, #232946 60%, #2d3748 100%);
+  border-radius: 16px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.12);
+  padding: 18px 18px 12px 18px;
+  color: #fff;
+  transition: box-shadow 0.2s;
+  border: 1.5px solid #232946;
+}
+.transaction-history-item:hover {
+  box-shadow: 0 4px 24px rgba(140, 222, 74, 0.13);
+  border: 1.5px solid #8cde4a;
+}
+
+.tx-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(140, 222, 74, 0.08);
+  font-size: 1.08rem;
+}
+.tx-row:last-child {
+  border-bottom: none;
+}
+.tx-label {
+  color: #b5ff7d;
+  font-weight: 500;
+}
+.tx-value {
+  color: #fff;
+  font-weight: 600;
+  text-align: right;
+  max-width: 60%;
+  word-break: break-all;
+}
+.tx-amount {
+  color: #8cde4a;
+  font-weight: 700;
+}
+.tx-status.success {
+  color: #8cde4a;
+}
+.tx-status.fail {
+  color: #e53e3e;
+}
+
+.transaction-history-back-btn {
+  width: 100%;
+  padding: 15px;
+  background: #393e46;
+  color: #8cde4a;
+  border: none;
+  border-radius: 10px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin-top: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.transaction-history-back-btn:hover {
+  background: #232946;
+}
+
+@media (max-width: 700px) {
+  .transaction-history-content {
+    min-width: 0;
+    max-width: 98vw;
+    padding: 18px 6px;
+  }
+  .transaction-history-item {
+    padding: 10px 6px 8px 6px;
+  }
+} 
