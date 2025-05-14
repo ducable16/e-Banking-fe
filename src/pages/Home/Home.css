@@ -340,7 +340,19 @@
 }
 
 .statistics-section {
-  padding: 1.5rem;
+  padding: 2.5rem 2rem 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* MonthlyBarChart căn giữa và chiếm toàn bộ không gian */
+.statistics-section .monthly-chart {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto 24px auto;
+  justify-content: center;
 }
 
 .account-info, 

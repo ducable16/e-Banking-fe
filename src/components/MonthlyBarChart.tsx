@@ -51,24 +51,11 @@ const MonthlyBarChart: React.FC<MonthlyBarChartProps> = ({ data }) => {
       {data.map((item, index) => {
         const incomeHeight = (item.income / maxValue) * maxHeight;
         const expenseHeight = (item.expense / maxValue) * maxHeight;
-        
         // Xác định tháng hiện tại (giả sử là tháng cuối cùng trong mảng)
         const isCurrentMonth = index === data.length - 1;
-        
         return (
           <div key={index} className="chart-column">
-            <div className="bar-container">
-              {/* Cột chi tiêu - Màu xanh */}
-              <div 
-                className="expense-bar"
-                style={{ 
-                  height: `${expenseHeight}px`,
-                  opacity: isCurrentMonth ? 1 : 0.5
-                }}
-                onMouseEnter={() => showTooltip(index, 'expense')}
-                onMouseLeave={hideTooltip}
-              />
-              
+            <div className="bar-container bar-row">
               {/* Cột thu nhập - Màu tím */}
               <div 
                 className="income-bar"
@@ -79,34 +66,30 @@ const MonthlyBarChart: React.FC<MonthlyBarChartProps> = ({ data }) => {
                 onMouseEnter={() => showTooltip(index, 'income')}
                 onMouseLeave={hideTooltip}
               />
-              
-              {/* Tooltip khi hover */}
+              {/* Cột chi tiêu - Màu xanh */}
+              <div 
+                className="expense-bar"
+                style={{ 
+                  height: `${expenseHeight}px`,
+                  opacity: isCurrentMonth ? 1 : 0.5
+                }}
+                onMouseEnter={() => showTooltip(index, 'expense')}
+                onMouseLeave={hideTooltip}
+              />
+              {/* Tooltip khi hover đúng bar */}
               {activeTooltip && activeTooltip.index === index && (
-                <div className={`chart-tooltip ${activeTooltip.type === 'income' ? 'income-tooltip' : 'expense-tooltip'}`}>
+                <div className="chart-tooltip">
                   <div className="tooltip-content">
-                    <strong>{activeTooltip.type === 'income' ? 'Thu' : 'Chi'}:</strong> 
-                    {activeTooltip.type === 'income' 
-                      ? formatCurrency(item.income)
-                      : formatCurrency(item.expense)
-                    }
+                    {activeTooltip.type === 'income' ? (
+                      <span style={{color: '#9b6dff'}}><strong>Thu:</strong> {formatCurrency(item.income)}</span>
+                    ) : (
+                      <span style={{color: '#4cd964'}}><strong>Chi:</strong> {formatCurrency(item.expense)}</span>
+                    )}
                   </div>
                   <div className="tooltip-arrow"></div>
                 </div>
               )}
             </div>
-            {/* Hiển thị giá trị cho tháng hiện tại */}
-            {/* {isCurrentMonth && (
-              <div className="current-month-tooltip">
-                <div className="tooltip-month">
-                  <span className="month-value">T5</span>
-                </div>
-                <div className="tooltip-values">
-                  <div className="expense-value">
-                    Chi: {formatCurrency(item.expense)}
-                  </div>
-                </div>
-              </div>
-            )} */}
             <div className="month-label">{item.month}</div>
           </div>
         );

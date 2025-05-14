@@ -35,9 +35,10 @@ import logoutIcon from '../../assets/icons/logoutIcon.png'; // Icon đăng xuấ
 import banner from '../../assets/icons/home/banner.jpg'; // Icon đăng xuất
 
 import axiosInstance from '../../services/AxiosInstance';
-import Transfer from '../Transfer/Transfer';
 import TransferForm from '../Transfer/Transfer';
 import TransactionHistory from '../TransactionHistory/TransactionHistory';
+import Settings from '../Settings/Settings';
+import AdminPanel from '../AdminPanel/AdminPanel';
 
 
 
@@ -50,6 +51,8 @@ const Home: React.FC = () => {
   const [loadingProfile, setLoadingProfile] = useState<boolean>(true);
   const [showTransferForm, setShowTransferForm] = useState<boolean>(false);
   const [showTransactionHistory, setShowTransactionHistory] = useState<boolean>(false);
+  const [showSettings, setShowSettings] = useState<boolean>(false);
+  const [showAdminPanel, setShowAdminPanel] = useState<boolean>(false);
 
   // Trong component Home
   const [monthlyData, setMonthlyData] = useState([
@@ -85,7 +88,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     const fetchMonthlyData = async () => {
       try {
-        const response = await axiosInstance.get('/transaction/summary/last-5-months') as any;
+        const response = await axiosInstance.get('/transaction/summary/last-12-months') as any;
         const res = response.data;
         // Map dữ liệu trả về thành format cho MonthlyBarChart
         const data = Array.isArray(res)
@@ -145,23 +148,23 @@ const Home: React.FC = () => {
         <nav className="sidebar-menu">
           <ul>
             {/* Ba mục đầu tiên */}
-            <li className="menu-item" onClick={() => { setShowTransferForm(false); setShowTransactionHistory(false); }} style={{cursor: 'pointer'}}>
+            <li className="menu-item" onClick={() => { setShowSettings(false); setShowTransferForm(false); setShowTransactionHistory(false); }} style={{cursor: 'pointer'}}>
               <span className="icon">
                 <img src={homeIcon} alt="Trang chủ" className="custom-icon" />
               </span>
               <span className="text">Trang chủ</span>
             </li>
-            <li className="menu-item" onClick={() => { setShowTransferForm(true); setShowTransactionHistory(false); }} style={{cursor: 'pointer'}}>
+            <li className="menu-item" onClick={() => { setShowTransferForm(true); setShowTransactionHistory(false); setShowSettings(false); }} style={{cursor: 'pointer'}}>
               <span className="icon">
                 <img src={transferIcon} alt="Chuyển tiền" className="custom-icon" />
               </span>
               <span className="text">Chuyển tiền</span>
             </li>
-            <li className="menu-item">
+            <li className="menu-item" onClick={() => { setShowTransactionHistory(true); setShowTransferForm(false); setShowSettings(false); }} style={{cursor: 'pointer'}}>
               <span className="icon">
-                <img src={billIcon} alt="Hóa đơn" className="custom-icon" />
+                <img src={billIcon} alt="Lịch sử giao dịch" className="custom-icon" />
               </span>
-              <span className="text">Hóa đơn</span>
+              <span className="text">Lịch sử giao dịch</span>
             </li>
             
             {/* Các mục menu với icon PNG thay thế emoji */}
@@ -207,11 +210,17 @@ const Home: React.FC = () => {
               </span>
               <span className="text">Ngân sách nhà nước</span>
             </li>
-            <li className="menu-item">
+            <li className="menu-item" onClick={() => { setShowSettings(true); setShowTransferForm(false); setShowTransactionHistory(false); setShowAdminPanel(false); }} style={{cursor: 'pointer'}}>
               <span className="icon">
-                <img src={utilityIcon} alt="Tiện ích" className="custom-icon" />
+                <img src={utilityIcon} alt="Cài đặt" className="custom-icon" />
               </span>
-              <span className="text">Tiện ích</span>
+              <span className="text">Cài đặt</span>
+            </li>
+            <li className="menu-item" onClick={() => { setShowAdminPanel(true); setShowSettings(false); setShowTransferForm(false); setShowTransactionHistory(false); }} style={{cursor: 'pointer'}}>
+              <span className="icon">
+                <img src={utilityIcon} alt="Quản lý" className="custom-icon" />
+              </span>
+              <span className="text">Quản lý</span>
             </li>
           </ul>
         </nav>
@@ -251,7 +260,7 @@ const Home: React.FC = () => {
         </header>
 
         {/* Banner chào mừng - đơn giản hóa chỉ giữ lại hình nền */}
-        {!showTransferForm && !showTransactionHistory && (
+        {!showTransferForm && !showTransactionHistory && !showSettings && !showAdminPanel && (
           <div className="banner">
             <img src={banner} alt="Banner chào mừng" />
             <div className="banner-content">
@@ -267,6 +276,10 @@ const Home: React.FC = () => {
           <div className="transfer-form-center"><TransferForm onBack={() => setShowTransferForm(false)} /></div>
         ) : showTransactionHistory ? (
           <div className="transfer-form-center"><TransactionHistory onBack={() => setShowTransactionHistory(false)} /></div>
+        ) : showSettings ? (
+          <div className="transfer-form-center"><Settings /></div>
+        ) : showAdminPanel ? (
+          <div className="transfer-form-center"><AdminPanel /></div>
         ) : (
         <>
         {/* Dashboard Grid - Đã loại bỏ phần reward */}
@@ -300,14 +313,7 @@ const Home: React.FC = () => {
                 </div>
               </div>
               <div className="account-actions">
-                <button className="action-btn" onClick={() => { setShowTransactionHistory(true); setShowTransferForm(false); }}>
-                  <span>Lịch sử giao dịch</span>
-                </button>
-                <button className="action-btn">
-                  <span>Tài khoản & Thẻ</span>
-                </button>
               </div>
-              <button className="open-account-btn">Mở tài khoản số chọn</button>
               <div className="card-section">
                 <h3>Thẻ ghi nợ/Thẻ tín dụng</h3>
                 
@@ -329,40 +335,36 @@ const Home: React.FC = () => {
           <section className="statistics-section">
             {/* Header với tiêu đề và phần trăm nằm trên cùng một hàng */}
             <div className="stats-header">
-              <h1>Chi tiêu so với tháng 04</h1>
-              {/* Hiển thị phần trăm động dựa trên sự so sánh */}
+              {/* Tính toán tháng hiện tại và tháng trước từ dữ liệu */}
               {(() => {
-                // Lấy dữ liệu tháng hiện tại và tháng trước
-                // const currentMonthData = monthlyData[monthlyData.length - 1];
-                // const currentMonthData = monthlyData[monthlyData.length - 2];
-                // giả sử
-                const currentMonthData = monthlyData.find(item => item.month === 'T5');
-                const previousMonthData = monthlyData.find(item => item.month === 'T4');
-                
-                if (!currentMonthData || !previousMonthData) {
-                  return <div className="target-indicator">Dữ liệu không khả dụng</div>;
+                if (monthlyData.length < 2) {
+                  return <>
+                    <h1>Chi tiêu so với tháng trước</h1>
+                    <div className="target-indicator">Dữ liệu không khả dụng</div>
+                  </>;
                 }
-                // Tính tỉ lệ chi tiêu so với tháng trước
-                const ratio = Math.round((currentMonthData.expense / previousMonthData.expense) * 100);
-                
-                // Xác định hướng mũi tên và màu sắc
-                const isIncrease = currentMonthData.expense > previousMonthData.expense;
+                const currentMonthData = monthlyData[monthlyData.length - 1];
+                const previousMonthData = monthlyData[monthlyData.length - 2];
+                const prevMonthLabel = previousMonthData.month;
+                const currentTotal = currentMonthData.income + currentMonthData.expense;
+                const previousTotal = previousMonthData.income + previousMonthData.expense;
+                const ratio = previousTotal > 0 ? Math.round((currentTotal / previousTotal) * 100) : 100;
+                const isIncrease = currentTotal > previousTotal;
                 const arrowDirection = isIncrease ? '↑' : '↓';
                 const colorClass = isIncrease ? 'increase' : 'decrease';
-                
-                return (
-                  <div className={`target-indicator ${colorClass}`}>
+                return <>
+                  <h1 style={{display: 'inline-block', marginRight: 24}}>Chi tiêu so với {prevMonthLabel}</h1>
+                  <div className={`target-indicator ${colorClass}`} style={{marginLeft: 32}}>
                     <span className="arrow">{arrowDirection}</span>
                     <span className="percentage">{ratio} %</span>
                   </div>
-                );
+                </>;
               })()}
             </div>
               <MonthlyBarChart data={monthlyData} />
             
             
             
-            <button className="manage-finance-btn">Quản lý tài chính cá nhân</button>
           </section>
 
         </div>
