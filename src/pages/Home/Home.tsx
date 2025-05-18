@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Home.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 import MonthlyBarChart from '../../components/MonthlyBarChart';
 
@@ -17,7 +17,7 @@ import insuranceIcon from '../../assets/icons/home/insuranceIcon.png';
 import investmentIcon from '../../assets/icons/home/investmentIcon.png';
 import budgetIcon from '../../assets/icons/home/budgetIcon.png';
 import utilityIcon from '../../assets/icons/home/utilityIcon.png';
-
+import adminIcon from '../../assets/icons/utilityIcon.png';
 
 // Thêm import ảnh thẻ
 import CreditCard from '../../components/CreditCard';
@@ -38,12 +38,12 @@ import axiosInstance from '../../services/AxiosInstance';
 import TransferForm from '../Transfer/Transfer';
 import TransactionHistory from '../TransactionHistory/TransactionHistory';
 import Settings from '../Settings/Settings';
-import AdminPanel from '../AdminPanel/AdminPanel';
 
 
 
 const Home: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [accountBalance, setAccountBalance] = useState<string>('***');
   const [showBalance, setShowBalance] = useState<boolean>(false);
   const [accountNumber, setAccountNumber] = useState<string>('');
@@ -52,7 +52,7 @@ const Home: React.FC = () => {
   const [showTransferForm, setShowTransferForm] = useState<boolean>(false);
   const [showTransactionHistory, setShowTransactionHistory] = useState<boolean>(false);
   const [showSettings, setShowSettings] = useState<boolean>(false);
-  const [showAdminPanel, setShowAdminPanel] = useState<boolean>(false);
+  const [activeMenu, setActiveMenu] = useState<string>('home');
 
   // Trong component Home
   const [monthlyData, setMonthlyData] = useState([
@@ -148,19 +148,19 @@ const Home: React.FC = () => {
         <nav className="sidebar-menu">
           <ul>
             {/* Ba mục đầu tiên */}
-            <li className="menu-item" onClick={() => { setShowSettings(false); setShowTransferForm(false); setShowTransactionHistory(false); }} style={{cursor: 'pointer'}}>
+            <li className={`menu-item${activeMenu === 'home' ? ' active' : ''}`} onClick={() => { setActiveMenu('home'); setShowSettings(false); setShowTransferForm(false); setShowTransactionHistory(false); }} style={{cursor: 'pointer'}}>
               <span className="icon">
                 <img src={homeIcon} alt="Trang chủ" className="custom-icon" />
               </span>
               <span className="text">Trang chủ</span>
             </li>
-            <li className="menu-item" onClick={() => { setShowTransferForm(true); setShowTransactionHistory(false); setShowSettings(false); }} style={{cursor: 'pointer'}}>
+            <li className={`menu-item${activeMenu === 'transfer' ? ' active' : ''}`} onClick={() => { setActiveMenu('transfer'); setShowTransferForm(true); setShowTransactionHistory(false); setShowSettings(false); }} style={{cursor: 'pointer'}}>
               <span className="icon">
                 <img src={transferIcon} alt="Chuyển tiền" className="custom-icon" />
               </span>
               <span className="text">Chuyển tiền</span>
             </li>
-            <li className="menu-item" onClick={() => { setShowTransactionHistory(true); setShowTransferForm(false); setShowSettings(false); }} style={{cursor: 'pointer'}}>
+            <li className={`menu-item${activeMenu === 'history' ? ' active' : ''}`} onClick={() => { setActiveMenu('history'); setShowTransactionHistory(true); setShowTransferForm(false); setShowSettings(false); }} style={{cursor: 'pointer'}}>
               <span className="icon">
                 <img src={billIcon} alt="Lịch sử giao dịch" className="custom-icon" />
               </span>
@@ -210,15 +210,15 @@ const Home: React.FC = () => {
               </span>
               <span className="text">Ngân sách nhà nước</span>
             </li>
-            <li className="menu-item" onClick={() => { setShowSettings(true); setShowTransferForm(false); setShowTransactionHistory(false); setShowAdminPanel(false); }} style={{cursor: 'pointer'}}>
+            <li className={`menu-item${activeMenu === 'settings' ? ' active' : ''}`} onClick={() => { setActiveMenu('settings'); setShowSettings(true); setShowTransferForm(false); setShowTransactionHistory(false); }} style={{cursor: 'pointer'}}>
               <span className="icon">
                 <img src={utilityIcon} alt="Cài đặt" className="custom-icon" />
               </span>
               <span className="text">Cài đặt</span>
             </li>
-            <li className="menu-item" onClick={() => { setShowAdminPanel(true); setShowSettings(false); setShowTransferForm(false); setShowTransactionHistory(false); }} style={{cursor: 'pointer'}}>
+            <li className={`menu-item${activeMenu === 'admin' ? ' active' : ''}`} onClick={() => { setActiveMenu('admin'); navigate('/admin'); }} style={{cursor: 'pointer'}}>
               <span className="icon">
-                <img src={utilityIcon} alt="Quản lý" className="custom-icon" />
+                <img src={adminIcon} alt="Quản lý" className="custom-icon" />
               </span>
               <span className="text">Quản lý</span>
             </li>
@@ -260,7 +260,7 @@ const Home: React.FC = () => {
         </header>
 
         {/* Banner chào mừng - đơn giản hóa chỉ giữ lại hình nền */}
-        {!showTransferForm && !showTransactionHistory && !showSettings && !showAdminPanel && (
+        {!showTransferForm && !showTransactionHistory && !showSettings && (
           <div className="banner">
             <img src={banner} alt="Banner chào mừng" />
             <div className="banner-content">
@@ -278,8 +278,6 @@ const Home: React.FC = () => {
           <div className="transfer-form-center"><TransactionHistory onBack={() => setShowTransactionHistory(false)} /></div>
         ) : showSettings ? (
           <div className="transfer-form-center"><Settings /></div>
-        ) : showAdminPanel ? (
-          <div className="transfer-form-center"><AdminPanel /></div>
         ) : (
         <>
         {/* Dashboard Grid - Đã loại bỏ phần reward */}
