@@ -36,6 +36,7 @@ const AdminPanel: React.FC = () => {
   });
   const navigate = useNavigate();
   const location = useLocation();
+  const [activeTab, setActiveTab] = useState<'user' | 'transaction'>('user');
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -165,13 +166,13 @@ const AdminPanel: React.FC = () => {
         </div>
         <nav className="sidebar-menu">
           <ul>
-            <li className={`menu-item${location.pathname === '/admin' ? ' active' : ''}`} onClick={() => navigate('/admin')}>
+            <li className={`menu-item${activeTab === 'user' ? ' active' : ''}`} onClick={() => setActiveTab('user')}>
               <span className="icon">
                 <img src={adminIcon} alt="Quản lý người dùng" className="custom-icon" />
               </span>
               <span className="text">Quản lý người dùng</span>
             </li>
-            <li className={`menu-item${location.pathname === '/admin/transactions' ? ' active' : ''}`} onClick={() => navigate('/admin/transactions')}>
+            <li className={`menu-item${activeTab === 'transaction' ? ' active' : ''}`} onClick={() => setActiveTab('transaction')}>
               <span className="icon">
                 <img src={adminIcon} alt="Quản lý giao dịch" className="custom-icon" />
               </span>
@@ -184,8 +185,9 @@ const AdminPanel: React.FC = () => {
       <div className="main-content">
         <header className="app-header">
           <div className="welcome">Xin chào, Admin</div>
+          <button className="admin-btn add" style={{marginLeft: 24}} onClick={() => navigate('/home')}>Quay về trang chủ</button>
         </header>
-        {location.pathname === '/admin/transactions' ? (
+        {activeTab === 'transaction' ? (
           <AdminTransactionPanel />
         ) : (
           <div className="admin-panel-content">

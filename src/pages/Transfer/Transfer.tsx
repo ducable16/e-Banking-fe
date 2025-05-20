@@ -46,23 +46,24 @@ const TransferForm: React.FC<TransferFormProps> = ({ onBack }) => {
 
   const [showSuccessBill, setShowSuccessBill] = useState(false);
 
+  const fetchProfile = async () => {
+    try {
+      setLoadingProfile(true);
+      const response = await axiosInstance.get('/user/profile') as any;
+      const profile = response.data;
+      setAccount(profile.account || '');
+      setBalance(profile.balance || 0);
+      setEmail(profile.email || '');
+    } catch (err) {
+      setAccount('Không xác định');
+      setBalance(0);
+      setEmail('');
+    } finally {
+      setLoadingProfile(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        setLoadingProfile(true);
-        const response = await axiosInstance.get('/user/profile') as any;
-        const profile = response.data;
-        setAccount(profile.account || '');
-        setBalance(profile.balance || 0);
-        setEmail(profile.email || '');
-      } catch (err) {
-        setAccount('Không xác định');
-        setBalance(0);
-        setEmail('');
-      } finally {
-        setLoadingProfile(false);
-      }
-    };
     fetchProfile();
   }, []);
 
@@ -161,13 +162,14 @@ const TransferForm: React.FC<TransferFormProps> = ({ onBack }) => {
         setShowOtp(false);
         setReceiverName('');
         setPendingTransaction(null);
+        fetchProfile();
       } else {
-        setError('Xác nhận OTP thất bại. Giao dịch đã bị hủy.');
-        setPendingTransaction(null);
+        setError('Mã OTP không đúng. Vui lòng kiểm tra và nhập lại.');
+        setOtp(''); // Clear OTP input để nhập lại
       }
     } catch (err: any) {
-      setError(err.message || 'Xác nhận OTP thất bại. Giao dịch đã bị hủy.');
-      setPendingTransaction(null);
+      setError(err.message || 'Mã OTP không đúng. Vui lòng kiểm tra và nhập lại.');
+      setOtp(''); // Clear OTP input để nhập lại
     } finally {
       setLoadingOtp(false);
     }
@@ -195,6 +197,7 @@ const TransferForm: React.FC<TransferFormProps> = ({ onBack }) => {
     setSuccessDetails(null);
     setSuccess('');
     setShowOtp(false);
+    fetchProfile();
   };
 
   // Lấy thời gian hiện tại định dạng đẹp

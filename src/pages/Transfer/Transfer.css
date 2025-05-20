@@ -264,7 +264,7 @@
   border-radius: 28px;
   box-shadow: 0 6px 32px rgba(0,0,0,0.22);
   padding: 36px 28px 32px 28px;
-  max-width: 420px;
+  max-width: 520px;
   margin: 0 auto;
   color: #fff;
   display: flex;
@@ -290,14 +290,14 @@
 }
 
 .success-bill-title {
-  font-size: 1.35rem;
+  font-size: 1.8rem;
   font-weight: 700;
   color: #b5ff7d;
   margin-bottom: 8px;
 }
 
 .success-bill-amount {
-  font-size: 2.2rem;
+  font-size: 2.8rem;
   font-weight: 800;
   color: #b5ff7d;
   margin-bottom: 6px;
@@ -312,7 +312,8 @@
 }
 
 .success-bill-time {
-  font-size: 1.05rem;
+  font-size: 1.2rem;
+  font-weight: 500;
   color: #b5ff7d;
   margin-bottom: 8px;
 }
@@ -321,7 +322,7 @@
   width: 100%;
   background: rgba(140, 222, 74, 0.08);
   border-radius: 14px;
-  padding: 18px 16px 10px 16px;
+  padding: 24px 20px 16px 20px;
   margin-bottom: 22px;
 }
 
@@ -329,9 +330,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 0;
+  padding: 12px 0;
   border-bottom: 1px solid rgba(140, 222, 74, 0.13);
-  font-size: 1.08rem;
+  font-size: 1.15rem;
 }
 .success-bill-row:last-child {
   border-bottom: none;
@@ -350,12 +351,12 @@
 
 .success-bill-new-btn {
   width: 100%;
-  padding: 16px;
+  padding: 18px;
   background: linear-gradient(90deg, #b5ff7d 0%, #8cde4a 100%);
   color: #232946;
   border: none;
   border-radius: 12px;
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   font-weight: 700;
   margin-top: 10px;
   cursor: pointer;

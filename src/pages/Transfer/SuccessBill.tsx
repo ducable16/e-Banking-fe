@@ -49,6 +49,10 @@ const SuccessBill: React.FC<SuccessBillProps> = ({
             <span>{note}</span>
           </div>
         )}
+        <div className="success-bill-row">
+          <span>Thời điểm chuyển khoản</span>
+          <span>{transactionTime}</span>
+        </div>
         {transactionId && (
           <div className="success-bill-row">
             <span>Mã giao dịch</span>
