@@ -26,33 +26,18 @@ const AdminTransactionPanel: React.FC = () => {
   const [search, setSearch] = useState('');
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
-  const [searchMode, setSearchMode] = useState<'all' | 'sender' | 'receiver'>('all');
+  const [searchType, setSearchType] = useState<'ALL' | 'SENDER' | 'RECEIVER'>('ALL');
   const [showFilter, setShowFilter] = useState(false);
   const [searchAccount, setSearchAccount] = useState('');
-  const [searchType, setSearchType] = useState<'email' | 'account'>('email');
+  const [keywordType, setKeywordType] = useState<'EMAIL' | 'ACCOUNT'>('EMAIL');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
   useEffect(() => {
     const fetchTransactions = async () => {
-      if (!fromDate && !toDate) {
-        try {
-          setLoading(true);
-          const res = await axiosInstance.get('/admin/all-transactions');
-          setTransactions(res.data || []);
-        } catch (err: any) {
-          setError('Không thể tải danh sách giao dịch.');
-        } finally {
-          setLoading(false);
-        }
-        return;
-      }
       try {
         setLoading(true);
-        const res = await axiosInstance.post('/transactions/filter', {
-          fromDate: fromDate || undefined,
-          toDate: toDate || undefined
-        });
+        const res = await axiosInstance.get('/admin/all-transactions');
         setTransactions(res.data || []);
       } catch (err: any) {
         setError('Không thể tải danh sách giao dịch.');
@@ -61,30 +46,9 @@ const AdminTransactionPanel: React.FC = () => {
       }
     };
     fetchTransactions();
-  }, [fromDate, toDate]);
+  }, []); // Chỉ gọi API khi component mount
 
-  const filtered = transactions.filter(tx => {
-    const txDate = new Date(tx.createdAt);
-    const from = fromDate ? new Date(fromDate) : null;
-    const to = toDate ? new Date(toDate) : null;
-    let inRange = true;
-    if (from && txDate < from) inRange = false;
-    if (to && txDate > to) inRange = false;
-    let match = true;
-    if (searchType === 'email' && search) {
-      if (searchMode === 'all') {
-        match = tx.sender.email?.includes(search) || tx.receiver.email?.includes(search);
-      } else if (searchMode === 'sender') {
-        match = tx.sender.email?.includes(search);
-      } else if (searchMode === 'receiver') {
-        match = tx.receiver.email?.includes(search);
-      }
-    }
-    if (searchType === 'account' && searchAccount) {
-      match = match && (tx.sender.account.includes(searchAccount) || tx.receiver.account.includes(searchAccount));
-    }
-    return match && inRange;
-  });
+  const filtered = transactions;
 
   // Tính toán phân trang
   const totalPages = Math.ceil(filtered.length / itemsPerPage);
@@ -97,23 +61,87 @@ const AdminTransactionPanel: React.FC = () => {
     setCurrentPage(page);
   };
 
-  const handleApplyFilter = () => {
-    setShowFilter(false);
+  // Hàm tạo mảng các trang cần hiển thị
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+    const maxVisiblePages = 3; // Số trang hiển thị tối đa mỗi bên
+    
+    if (totalPages <= maxVisiblePages * 2 + 1) {
+      // Nếu tổng số trang ít, hiển thị tất cả
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+    
+    // Luôn hiển thị trang đầu
+    pageNumbers.push(1);
+    
+    // Tính toán các trang ở giữa
+    let startPage = Math.max(2, currentPage - maxVisiblePages);
+    let endPage = Math.min(totalPages - 1, currentPage + maxVisiblePages);
+    
+    // Điều chỉnh để luôn hiển thị đủ số trang
+    if (startPage > 2) {
+      pageNumbers.push('...');
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i);
+    }
+    
+    if (endPage < totalPages - 1) {
+      pageNumbers.push('...');
+    }
+    
+    // Luôn hiển thị trang cuối
+    pageNumbers.push(totalPages);
+    
+    return pageNumbers;
   };
 
-  const handleResetFilter = () => {
-    setSearch('');
-    setFromDate('');
-    setToDate('');
-    setSearchMode('all');
-    setSearchAccount('');
-    setSearchType('email');
-    setShowFilter(false);
+  const handleResetFilter = async () => {
+    try {
+      setLoading(true);
+      const res = await axiosInstance.get('/admin/all-transactions');
+      setTransactions(res.data || []);
+      setSearch('');
+      setFromDate('');
+      setToDate('');
+      setSearchType('ALL');
+      setSearchAccount('');
+      setKeywordType('EMAIL');
+      setShowFilter(false);
+      setCurrentPage(1); // Reset về trang 1 khi reset filter
+    } catch (err: any) {
+      setError('Không thể tải danh sách giao dịch.');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleSearchTypeChange = (type: 'email' | 'account') => {
-    setSearchType(type);
-    if (type === 'email') {
+  const handleApplyFilter = async () => {
+    try {
+      setLoading(true);
+      const filterData = {
+        searchType: searchType,
+        keywordType: keywordType,
+        keyword: keywordType === 'EMAIL' ? search : searchAccount,
+        startDate: fromDate || undefined,
+        endDate: toDate || undefined
+      };
+      
+      const res = await axiosInstance.post('/admin/transaction/filter', filterData);
+      setTransactions(res.data || []);
+      setShowFilter(false);
+      setCurrentPage(1); // Reset về trang 1 khi áp dụng filter mới
+    } catch (err: any) {
+      setError('Không thể tải danh sách giao dịch.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleKeywordTypeChange = (type: 'EMAIL' | 'ACCOUNT') => {
+    setKeywordType(type);
+    if (type === 'EMAIL') {
       setSearchAccount('');
     } else {
       setSearch('');
@@ -151,20 +179,20 @@ const AdminTransactionPanel: React.FC = () => {
                 <label style={{display: 'block', marginBottom: 8, color: '#666'}}>Loại tìm kiếm</label>
                 <div style={{display: 'flex', gap: 8}}>
                   <button 
-                    className={`admin-btn${searchMode === 'all' ? ' add' : ''}`}
-                    onClick={() => setSearchMode('all')}
+                    className={`admin-btn${searchType === 'ALL' ? ' add' : ''}`}
+                    onClick={() => setSearchType('ALL')}
                   >
                     Tất cả
                   </button>
                   <button 
-                    className={`admin-btn${searchMode === 'sender' ? ' add' : ''}`}
-                    onClick={() => setSearchMode('sender')}
+                    className={`admin-btn${searchType === 'SENDER' ? ' add' : ''}`}
+                    onClick={() => setSearchType('SENDER')}
                   >
                     Người gửi
                   </button>
                   <button 
-                    className={`admin-btn${searchMode === 'receiver' ? ' add' : ''}`}
-                    onClick={() => setSearchMode('receiver')}
+                    className={`admin-btn${searchType === 'RECEIVER' ? ' add' : ''}`}
+                    onClick={() => setSearchType('RECEIVER')}
                   >
                     Người nhận
                   </button>
@@ -175,14 +203,14 @@ const AdminTransactionPanel: React.FC = () => {
                 <label style={{display: 'block', marginBottom: 8, color: '#666'}}>Chọn loại tìm kiếm</label>
                 <div style={{display: 'flex', gap: 8, marginBottom: 8}}>
                   <button 
-                    className={`admin-btn${searchType === 'email' ? ' add' : ''}`}
-                    onClick={() => handleSearchTypeChange('email')}
+                    className={`admin-btn${keywordType === 'EMAIL' ? ' add' : ''}`}
+                    onClick={() => handleKeywordTypeChange('EMAIL')}
                   >
                     Tìm theo email
                   </button>
                   <button 
-                    className={`admin-btn${searchType === 'account' ? ' add' : ''}`}
-                    onClick={() => handleSearchTypeChange('account')}
+                    className={`admin-btn${keywordType === 'ACCOUNT' ? ' add' : ''}`}
+                    onClick={() => handleKeywordTypeChange('ACCOUNT')}
                   >
                     Tìm theo số tài khoản
                   </button>
@@ -190,7 +218,7 @@ const AdminTransactionPanel: React.FC = () => {
               </div>
               
               <div>
-                {searchType === 'email' ? (
+                {keywordType === 'EMAIL' ? (
                   <div>
                     <label style={{display: 'block', marginBottom: 8, color: '#666'}}>Tìm kiếm theo email</label>
                     <input
@@ -293,18 +321,21 @@ const AdminTransactionPanel: React.FC = () => {
             </button>
             
             {/* Hiển thị các nút trang */}
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+            {getPageNumbers().map((page, index) => (
               <button
-                key={page}
+                key={index}
                 className={`admin-btn${currentPage === page ? ' add' : ''}`}
-                onClick={() => handlePageChange(page)}
+                onClick={() => typeof page === 'number' ? handlePageChange(page) : null}
                 style={{
                   minWidth: '32px',
                   height: '32px',
                   padding: '0 8px',
                   display: 'flex',
                   alignItems: 'center',
-                  justifyContent: 'center'
+                  justifyContent: 'center',
+                  cursor: typeof page === 'number' ? 'pointer' : 'default',
+                  backgroundColor: typeof page === 'number' && currentPage === page ? '#8cde4a' : 'transparent',
+                  color: typeof page === 'number' && currentPage === page ? '#232946' : '#666'
                 }}
               >
                 {page}
