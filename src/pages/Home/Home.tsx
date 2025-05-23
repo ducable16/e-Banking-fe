@@ -48,6 +48,7 @@ const Home: React.FC = () => {
   const [showBalance, setShowBalance] = useState<boolean>(false);
   const [accountNumber, setAccountNumber] = useState<string>('');
   const [fullName, setFullName] = useState<string>('');
+  const [userRole, setUserRole] = useState<string>('');
   const [loadingProfile, setLoadingProfile] = useState<boolean>(true);
   const [showTransferForm, setShowTransferForm] = useState<boolean>(false);
   const [showTransactionHistory, setShowTransactionHistory] = useState<boolean>(false);
@@ -73,10 +74,12 @@ const Home: React.FC = () => {
         setAccountNumber(profile.account || '');
         setAccountBalance(showBalance ? (profile.balance?.toLocaleString?.() || '0') : '***');
         setFullName(profile.fullName || '');
+        setUserRole(profile.role || '');
       } catch (err) {
         setAccountNumber('Không xác định');
         setAccountBalance('***');
         setFullName('Không xác định');
+        setUserRole('');
       } finally {
         setLoadingProfile(false);
       }
@@ -115,8 +118,8 @@ const Home: React.FC = () => {
   const handleLogout = () => {
     // Xóa thông tin đăng nhập từ localStorage hoặc sessionStorage nếu có
     localStorage.removeItem('token');
-    // Chuyển hướng về trang đăng nhập
-    navigate('/landing');
+    // Chuyển hướng về trang login
+    navigate('/login');
   };
 
   const copyToClipboard = () => {
@@ -216,12 +219,14 @@ const Home: React.FC = () => {
               </span>
               <span className="text">Cài đặt</span>
             </li>
-            <li className={`menu-item${activeMenu === 'admin' ? ' active' : ''}`} onClick={() => { setActiveMenu('admin'); navigate('/admin'); }} style={{cursor: 'pointer'}}>
-              <span className="icon">
-                <img src={adminIcon} alt="Quản lý" className="custom-icon" />
-              </span>
-              <span className="text">Quản lý</span>
-            </li>
+            {userRole === 'ADMIN' && (
+              <li className={`menu-item${activeMenu === 'admin' ? ' active' : ''}`} onClick={() => { setActiveMenu('admin'); navigate('/admin'); }} style={{cursor: 'pointer'}}>
+                <span className="icon">
+                  <img src={adminIcon} alt="Quản lý" className="custom-icon" />
+                </span>
+                <span className="text">Quản lý</span>
+              </li>
+            )}
           </ul>
         </nav>
         <div className="support-section">
