@@ -46,6 +46,8 @@ const TransferForm: React.FC<TransferFormProps> = ({ onBack }) => {
 
   const [showSuccessBill, setShowSuccessBill] = useState(false);
 
+  const [selectedBank, setSelectedBank] = useState('');
+
   const fetchProfile = async () => {
     try {
       setLoadingProfile(true);
@@ -87,7 +89,7 @@ const TransferForm: React.FC<TransferFormProps> = ({ onBack }) => {
     e.preventDefault();
     setError('');
     setSuccess('');
-    if (!receiverAccount || !amount) {
+    if (!receiverAccount || !amount || !selectedBank) {
       setError('Vui lòng nhập đầy đủ thông tin bắt buộc.');
       return;
     }
@@ -236,6 +238,23 @@ const TransferForm: React.FC<TransferFormProps> = ({ onBack }) => {
       </div>
       {!showOtp ? (
         <form className="transfer-form" onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label>Ngân hàng *</label>
+            <select
+              value={selectedBank}
+              onChange={e => setSelectedBank(e.target.value)}
+              required
+              style={{ width: '100%', padding: '18px', borderRadius: 10, fontSize: '1.15rem', background: '#232946', color: '#fff', border: '1.5px solid #8cde4a', marginBottom: 8 }}
+            >
+              <option value="">Chọn ngân hàng</option>
+              <option value="HUST Bank">HUST Bank</option>
+              <option value="NEU Bank">NEU Bank</option>
+              <option value="FTU Bank">FTU Bank</option>
+              <option value="PTIT Bank">PTIT Bank</option>
+              <option value="BK Bank">BK Bank</option>
+              <option value="UET Bank">UET Bank</option>
+            </select>
+          </div>
           <div className="form-group">
             <label>Số tài khoản nhận *</label>
             <div style={{ display: 'flex', gap: 8 }}>

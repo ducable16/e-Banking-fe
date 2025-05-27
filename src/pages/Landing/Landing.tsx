@@ -22,7 +22,7 @@ const Landing: React.FC = () => {
       {/* Hero Section */}
       <section className="hero-section">
         <div className="hero-content">
-          <h1>SENA Digibank</h1>
+          <h1>HUST Digibank</h1>
           <h2>Ngân hàng số thông minh cho tương lai của bạn</h2>
           <p>Trải nghiệm dịch vụ ngân hàng hiện đại, an toàn và tiện lợi mọi lúc, mọi nơi</p>
           <div className="hero-buttons">
@@ -75,7 +75,7 @@ const Landing: React.FC = () => {
 
       {/* Why Choose Us Section */}
       <section className="why-us-section">
-        <h2>Tại sao chọn SENA Digibank?</h2>
+        <h2>Tại sao chọn HUST Digibank?</h2>
         <div className="why-us-content">
           <div className="why-us-text">
             <div className="why-us-item">
@@ -103,7 +103,7 @@ const Landing: React.FC = () => {
         <div className="testimonials-container">
           <div className="testimonial-card">
             <div className="testimonial-content">
-              <p>"SENA Digibank giúp tôi quản lý tài chính dễ dàng. Giao diện đơn giản, dễ sử dụng và luôn cập nhật công nghệ mới!"</p>
+              <p>"HUST Digibank giúp tôi quản lý tài chính dễ dàng. Giao diện đơn giản, dễ sử dụng và luôn cập nhật công nghệ mới!"</p>
             </div>
             <div className="testimonial-author">
               <p><strong>Nguyễn Văn A</strong></p>
@@ -123,7 +123,7 @@ const Landing: React.FC = () => {
 
           <div className="testimonial-card">
             <div className="testimonial-content">
-              <p>"Chuyển tiền quốc tế với SENA rất thuận tiện và tỷ giá hối đoái cạnh tranh. Tôi sẽ tiếp tục sử dụng dịch vụ này."</p>
+              <p>"Chuyển tiền quốc tế với HUST rất thuận tiện và tỷ giá hối đoái cạnh tranh. Tôi sẽ tiếp tục sử dụng dịch vụ này."</p>
             </div>
             <div className="testimonial-author">
               <p><strong>Lê Văn C</strong></p>
@@ -149,7 +149,7 @@ const Landing: React.FC = () => {
       <footer className="landing-footer">
         <div className="footer-content">
           <div className="footer-logo">
-            <h3>SENA Digibank</h3>
+            <h3>HUST Digibank</h3>
             <p>Ngân hàng số cho người Việt</p>
           </div>
           <div className="footer-links">
@@ -183,7 +183,7 @@ const Landing: React.FC = () => {
           </div>
         </div>
         <div className="footer-bottom">
-          <p>&copy; {new Date().getFullYear()} SENA Digibank. Tất cả các quyền được bảo lưu.</p>
+          <p>&copy; {new Date().getFullYear()} HUST Digibank. Tất cả các quyền được bảo lưu.</p>
           <div className="social-links">
             <a href="#" aria-label="Facebook"><i className="fa fa-facebook"></i></a>
             <a href="#" aria-label="LinkedIn"><i className="fa fa-linkedin"></i></a>

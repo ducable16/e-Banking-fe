@@ -38,6 +38,7 @@ import axiosInstance from '../../services/AxiosInstance';
 import TransferForm from '../Transfer/Transfer';
 import TransactionHistory from '../TransactionHistory/TransactionHistory';
 import Settings from '../Settings/Settings';
+import ComingSoon from '../../components/ComingSoon';
 
 
 
@@ -54,6 +55,7 @@ const Home: React.FC = () => {
   const [showTransactionHistory, setShowTransactionHistory] = useState<boolean>(false);
   const [showSettings, setShowSettings] = useState<boolean>(false);
   const [activeMenu, setActiveMenu] = useState<string>('home');
+  const [showComingSoon, setShowComingSoon] = useState<boolean>(false);
 
   // Trong component Home
   const [monthlyData, setMonthlyData] = useState([
@@ -142,7 +144,7 @@ const Home: React.FC = () => {
       {/* Sidebar */}
       <div className="sidebar">
         <div className="logo">
-          <h2>SENA Digibank</h2>
+          <h2>HUST Digibank</h2>
         </div>
         <div className="search-bar">
           <img src={searchIcon} className="search-icon" alt="Search" />
@@ -151,19 +153,19 @@ const Home: React.FC = () => {
         <nav className="sidebar-menu">
           <ul>
             {/* Ba mục đầu tiên */}
-            <li className={`menu-item${activeMenu === 'home' ? ' active' : ''}`} onClick={() => { setActiveMenu('home'); setShowSettings(false); setShowTransferForm(false); setShowTransactionHistory(false); }} style={{cursor: 'pointer'}}>
+            <li className={`menu-item${activeMenu === 'home' ? ' active' : ''}`} onClick={() => { setActiveMenu('home'); setShowSettings(false); setShowTransferForm(false); setShowTransactionHistory(false); setShowComingSoon(false); }} style={{cursor: 'pointer'}}>
               <span className="icon">
                 <img src={homeIcon} alt="Trang chủ" className="custom-icon" />
               </span>
               <span className="text">Trang chủ</span>
             </li>
-            <li className={`menu-item${activeMenu === 'transfer' ? ' active' : ''}`} onClick={() => { setActiveMenu('transfer'); setShowTransferForm(true); setShowTransactionHistory(false); setShowSettings(false); }} style={{cursor: 'pointer'}}>
+            <li className={`menu-item${activeMenu === 'transfer' ? ' active' : ''}`} onClick={() => { setActiveMenu('transfer'); setShowTransferForm(true); setShowTransactionHistory(false); setShowSettings(false); setShowComingSoon(false); }} style={{cursor: 'pointer'}}>
               <span className="icon">
                 <img src={transferIcon} alt="Chuyển tiền" className="custom-icon" />
               </span>
               <span className="text">Chuyển tiền</span>
             </li>
-            <li className={`menu-item${activeMenu === 'history' ? ' active' : ''}`} onClick={() => { setActiveMenu('history'); setShowTransactionHistory(true); setShowTransferForm(false); setShowSettings(false); }} style={{cursor: 'pointer'}}>
+            <li className={`menu-item${activeMenu === 'history' ? ' active' : ''}`} onClick={() => { setActiveMenu('history'); setShowTransactionHistory(true); setShowTransferForm(false); setShowSettings(false); setShowComingSoon(false); }} style={{cursor: 'pointer'}}>
               <span className="icon">
                 <img src={billIcon} alt="Lịch sử giao dịch" className="custom-icon" />
               </span>
@@ -171,56 +173,56 @@ const Home: React.FC = () => {
             </li>
             
             {/* Các mục menu với icon PNG thay thế emoji */}
-            <li className="menu-item">
+            <li className={`menu-item${activeMenu === 'topup' ? ' active' : ''}`} onClick={() => { setActiveMenu('topup'); setShowComingSoon(true); setShowSettings(false); setShowTransferForm(false); setShowTransactionHistory(false); }} style={{cursor: 'pointer'}}>
               <span className="icon">
                 <img src={topupIcon} alt="Nạp tiền" className="custom-icon" />
               </span>
               <span className="text">Nạp tiền</span>
             </li>
-            <li className="menu-item">
+            <li className={`menu-item${activeMenu === 'card' ? ' active' : ''}`} onClick={() => { setActiveMenu('card'); setShowComingSoon(true); setShowSettings(false); setShowTransferForm(false); setShowTransactionHistory(false); }} style={{cursor: 'pointer'}}>
               <span className="icon">
                 <img src={cardIcon} alt="Dịch vụ thẻ" className="custom-icon" />
               </span>
               <span className="text">Dịch vụ thẻ</span>
             </li>
-            <li className="menu-item">
+            <li className={`menu-item${activeMenu === 'credit' ? ' active' : ''}`} onClick={() => { setActiveMenu('credit'); setShowComingSoon(true); setShowSettings(false); setShowTransferForm(false); setShowTransactionHistory(false); }} style={{cursor: 'pointer'}}>
               <span className="icon">
                 <img src={creditIcon} alt="Tín dụng" className="custom-icon" />
               </span>
               <span className="text">Tín dụng</span>
             </li>
-            <li className="menu-item">
+            <li className={`menu-item${activeMenu === 'saving' ? ' active' : ''}`} onClick={() => { setActiveMenu('saving'); setShowComingSoon(true); setShowSettings(false); setShowTransferForm(false); setShowTransactionHistory(false); }} style={{cursor: 'pointer'}}>
               <span className="icon">
                 <img src={savingIcon} alt="Tiết kiệm" className="custom-icon" />
               </span>
               <span className="text">Tiết kiệm</span>
             </li>
-            <li className="menu-item">
+            <li className={`menu-item${activeMenu === 'insurance' ? ' active' : ''}`} onClick={() => { setActiveMenu('insurance'); setShowComingSoon(true); setShowSettings(false); setShowTransferForm(false); setShowTransactionHistory(false); }} style={{cursor: 'pointer'}}>
               <span className="icon">
                 <img src={insuranceIcon} alt="Bảo hiểm" className="custom-icon" />
               </span>
               <span className="text">Bảo hiểm</span>
             </li>
-            <li className="menu-item">
+            <li className={`menu-item${activeMenu === 'investment' ? ' active' : ''}`} onClick={() => { setActiveMenu('investment'); setShowComingSoon(true); setShowSettings(false); setShowTransferForm(false); setShowTransactionHistory(false); }} style={{cursor: 'pointer'}}>
               <span className="icon">
                 <img src={investmentIcon} alt="Đầu tư" className="custom-icon" />
               </span>
               <span className="text">Đầu tư</span>
             </li>
-            <li className="menu-item">
+            <li className={`menu-item${activeMenu === 'budget' ? ' active' : ''}`} onClick={() => { setActiveMenu('budget'); setShowComingSoon(true); setShowSettings(false); setShowTransferForm(false); setShowTransactionHistory(false); }} style={{cursor: 'pointer'}}>
               <span className="icon">
                 <img src={budgetIcon} alt="Ngân sách nhà nước" className="custom-icon" />
               </span>
               <span className="text">Ngân sách nhà nước</span>
             </li>
-            <li className={`menu-item${activeMenu === 'settings' ? ' active' : ''}`} onClick={() => { setActiveMenu('settings'); setShowSettings(true); setShowTransferForm(false); setShowTransactionHistory(false); }} style={{cursor: 'pointer'}}>
+            <li className={`menu-item${activeMenu === 'settings' ? ' active' : ''}`} onClick={() => { setActiveMenu('settings'); setShowSettings(true); setShowTransferForm(false); setShowTransactionHistory(false); setShowComingSoon(false); }} style={{cursor: 'pointer'}}>
               <span className="icon">
                 <img src={utilityIcon} alt="Cài đặt" className="custom-icon" />
               </span>
               <span className="text">Cài đặt</span>
             </li>
             {userRole === 'ADMIN' && (
-              <li className={`menu-item${activeMenu === 'admin' ? ' active' : ''}`} onClick={() => { setActiveMenu('admin'); navigate('/admin'); }} style={{cursor: 'pointer'}}>
+              <li className={`menu-item${activeMenu === 'admin' ? ' active' : ''}`} onClick={() => { setActiveMenu('admin'); navigate('/admin'); setShowComingSoon(false); }} style={{cursor: 'pointer'}}>
                 <span className="icon">
                   <img src={adminIcon} alt="Quản lý" className="custom-icon" />
                 </span>
@@ -265,7 +267,7 @@ const Home: React.FC = () => {
         </header>
 
         {/* Banner chào mừng - đơn giản hóa chỉ giữ lại hình nền */}
-        {!showTransferForm && !showTransactionHistory && !showSettings && (
+        {!showTransferForm && !showTransactionHistory && !showSettings && !showComingSoon && (
           <div className="banner">
             <img src={banner} alt="Banner chào mừng" />
             <div className="banner-content">
@@ -283,6 +285,8 @@ const Home: React.FC = () => {
           <div className="transfer-form-center"><TransactionHistory onBack={() => setShowTransactionHistory(false)} /></div>
         ) : showSettings ? (
           <div className="transfer-form-center"><Settings /></div>
+        ) : showComingSoon ? (
+          <div className="transfer-form-center"><ComingSoon /></div>
         ) : (
         <>
         {/* Dashboard Grid - Đã loại bỏ phần reward */}
@@ -370,26 +374,6 @@ const Home: React.FC = () => {
             
           </section>
 
-        </div>
-        {/* Latest Updates */}
-        <section className="latest-updates">
-          <div className="section-header">
-            <h2>Mới nhất trên VCB Digibank</h2>
-            <button className="view-all-btn">Xem tất cả ưu đãi →</button>
-          </div>
-          <div className="promotions-slider">
-            {/* Các thẻ quảng cáo/ưu đãi sẽ đặt ở đây */}
-            <div className="promo-card">
-              <div className="promo-tag">mới</div>
-              {/* Nội dung khuyến mãi */}
-            </div>
-          </div>
-        </section>
-
-        {/* Update Time */}
-        <div className="update-time">
-          <span>Cập nhật: 19.54 - 31/05/2025</span>
-          <button className="refresh-btn">🔄</button>
         </div>
         </>
         )}

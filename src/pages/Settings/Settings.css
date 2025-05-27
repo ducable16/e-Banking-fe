@@ -99,6 +99,44 @@
   text-align: center;
 }
 
+.settings-main-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.profile-info-table {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto 18px auto;
+}
+
+.change-password-card {
+  background: #232946;
+  border: 1.5px solid #8cde4a;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(140,222,74,0.08);
+  padding: 24px 24px 18px 24px;
+  margin: 18px auto 0 auto;
+  max-width: 420px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.settings-actions.small {
+  gap: 12px;
+  margin-top: 10px;
+}
+.settings-actions.small .settings-btn {
+  padding: 10px 22px;
+  font-size: 1rem;
+  border-radius: 10px;
+}
+
 @media (max-width: 700px) {
   .settings-content {
     min-width: 0;
@@ -110,5 +148,16 @@
   }
   .profile-row input {
     width: 100%;
+  }
+  .settings-main-grid {
+    padding: 0;
+  }
+  .profile-info-table {
+    max-width: 98vw;
+    padding: 0 2vw;
+  }
+  .change-password-card {
+    max-width: 98vw;
+    padding: 12px 4px 10px 4px;
   }
 } 

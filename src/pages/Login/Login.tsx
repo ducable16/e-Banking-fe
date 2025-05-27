@@ -63,12 +63,32 @@ const Login: React.FC = () => {
       const data = res.data;
       if (data && data.accessToken) {
         localStorage.setItem('token', data.accessToken);
+        // Gọi API lấy profile để lấy role
+        try {
+          const profileRes = await fetch('http://localhost:8080/user/profile', {
+            headers: { 'Authorization': `Bearer ${data.accessToken}` }
+          });
+          const profileData = await profileRes.json();
+          if (profileData && profileData.data && profileData.data.role) {
+            localStorage.setItem('role', profileData.data.role.toUpperCase());
+          }
+        } catch (profileErr) {
+          // Nếu lỗi vẫn cho login nhưng không set role
+        }
         navigate('/home');
       } else {
         setError('Đăng nhập thành công nhưng không nhận được accessToken!');
       }
     } catch (err: any) {
-      setError(err.message || 'Đăng nhập thất bại. Vui lòng thử lại sau.');
+      if (
+        err?.errorCode === 'USER_NOT_FOUND' ||
+        err?.errorCode === 'INVALID_CREDENTIALS' ||
+        (err?.message && /user not found|not found|mật khẩu|password|sai/i.test(err.message))
+      ) {
+        setError('Email hoặc mật khẩu không đúng. Vui lòng thử lại.');
+      } else {
+        setError(err.message || 'Đăng nhập thất bại. Vui lòng thử lại sau.');
+      }
     } finally {
       setLoading(false);
     }
@@ -78,7 +98,7 @@ const Login: React.FC = () => {
     <div className="modern-login-container">
       <div className="login-content">
         <div className="login-header">
-          <h2>SENA Digibank</h2>
+          <h2>HUST Digibank</h2>
           <p>Xin kính chào Quý khách</p>
         </div>
         

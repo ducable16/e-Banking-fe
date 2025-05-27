@@ -157,7 +157,7 @@ const Register: React.FC = () => {
     <div className="modern-register-container">
       <div className="register-content">
         <div className="register-header">
-          <h2>SENA Digibank</h2>
+          <h2>HUST Digibank</h2>
           <p>{step === 1 ? 'Bắt đầu đăng ký' : 'Hoàn tất đăng ký'}</p>
         </div>
         

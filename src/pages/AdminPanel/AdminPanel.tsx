@@ -5,6 +5,8 @@ import '../Home/Home.css';
 import adminIcon from '../../assets/icons/utilityIcon.png'; // Dùng icon utility tạm thời
 import { useNavigate, useLocation } from 'react-router-dom';
 import AdminTransactionPanel from './AdminTransactionPanel';
+import AdminFinancePanel from './AdminFinancePanel';
+import AdminDashboard from './AdminDashboard';
 
 interface User {
   userId: string;
@@ -36,7 +38,11 @@ const AdminPanel: React.FC = () => {
   });
   const navigate = useNavigate();
   const location = useLocation();
-  const [activeTab, setActiveTab] = useState<'user' | 'transaction'>('user');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'user' | 'transaction' | 'finance'>('dashboard');
+  const [resetPasswordUserId, setResetPasswordUserId] = useState<string | null>(null);
+  const [resetPasswordValue, setResetPasswordValue] = useState('');
+  const [resetPasswordError, setResetPasswordError] = useState('');
+  const [resetPasswordSuccess, setResetPasswordSuccess] = useState('');
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -157,15 +163,55 @@ const AdminPanel: React.FC = () => {
     }
   };
 
+  const handleResetPassword = (userId: string) => {
+    setResetPasswordUserId(userId);
+    setResetPasswordValue('');
+    setResetPasswordError('');
+    setResetPasswordSuccess('');
+  };
+
+  const handleResetPasswordSubmit = async () => {
+    if (!resetPasswordUserId || !resetPasswordValue) {
+      setResetPasswordError('Vui lòng nhập mật khẩu mới.');
+      return;
+    }
+    try {
+      setLoading(true);
+      setResetPasswordError('');
+      setResetPasswordSuccess('');
+      await axiosInstance.post('/admin/change-password', {
+        userId: resetPasswordUserId,
+        password: resetPasswordValue
+      });
+      setResetPasswordSuccess('Đặt lại mật khẩu thành công!');
+      setTimeout(() => {
+        setResetPasswordUserId(null);
+        setResetPasswordValue('');
+        setResetPasswordError('');
+        setResetPasswordSuccess('');
+      }, 1200);
+    } catch (err: any) {
+      setResetPasswordError(err.message || 'Đặt lại mật khẩu thất bại.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="banking-app">
       {/* Sidebar giống Home */}
       <div className="sidebar">
         <div className="logo">
-          <h2>SENA Digibank</h2>
+          <h2>HUST Digibank</h2>
         </div>
         <nav className="sidebar-menu">
           <ul>
+            <li className={`menu-item${activeTab === 'dashboard' ? ' active' : ''}`} onClick={() => setActiveTab('dashboard')}>
+              <span className="icon">
+                <img src={adminIcon} alt="Tổng quan" className="custom-icon" />
+              </span>
+              <span className="text">Tổng quan</span>
+            </li>
             <li className={`menu-item${activeTab === 'user' ? ' active' : ''}`} onClick={() => setActiveTab('user')}>
               <span className="icon">
                 <img src={adminIcon} alt="Quản lý người dùng" className="custom-icon" />
@@ -178,6 +224,12 @@ const AdminPanel: React.FC = () => {
               </span>
               <span className="text">Quản lý giao dịch</span>
             </li>
+            <li className={`menu-item${activeTab === 'finance' ? ' active' : ''}`} onClick={() => setActiveTab('finance')}>
+              <span className="icon">
+                <img src={adminIcon} alt="Quản lý tài chính" className="custom-icon" />
+              </span>
+              <span className="text">Quản lý tài chính</span>
+            </li>
           </ul>
         </nav>
       </div>
@@ -187,8 +239,12 @@ const AdminPanel: React.FC = () => {
           <div className="welcome">Xin chào, Admin</div>
           <button className="admin-btn add" style={{marginLeft: 24}} onClick={() => navigate('/home')}>Quay về trang chủ</button>
         </header>
-        {activeTab === 'transaction' ? (
+        {activeTab === 'dashboard' ? (
+          <AdminDashboard />
+        ) : activeTab === 'transaction' ? (
           <AdminTransactionPanel />
+        ) : activeTab === 'finance' ? (
+          <AdminFinancePanel />
         ) : (
           <div className="admin-panel-content">
             <h2 className="admin-panel-title">Quản lý người dùng</h2>
@@ -222,9 +278,28 @@ const AdminPanel: React.FC = () => {
                         <div className="admin-actions">
                           <button className="admin-btn edit" onClick={() => handleEdit(user)}>Sửa</button>
                           <button className="admin-btn delete" onClick={() => handleDelete(user.userId)}>Xóa</button>
+                          <button className="admin-btn add" onClick={() => handleResetPassword(user.userId)}>Reset MK</button>
                           <button className={`admin-btn lock${user.status === 'LOCKED' ? ' unlock' : ''}`} onClick={() => handleToggleLock(user.userId)}>
                             {user.status === 'LOCKED' ? 'Mở khóa' : 'Khóa'}
                           </button>
+                          {resetPasswordUserId === user.userId && (
+                            <div style={{marginTop: 8, background: '#fff', border: '1px solid #d1c4e9', borderRadius: 8, padding: 12, boxShadow: '0 2px 8px rgba(75,41,150,0.08)'}}>
+                              <div style={{marginBottom: 8, fontWeight: 500, color: '#4b2996'}}>Nhập mật khẩu mới:</div>
+                              <input
+                                type="password"
+                                value={resetPasswordValue}
+                                onChange={e => setResetPasswordValue(e.target.value)}
+                                style={{width: '100%', padding: 8, borderRadius: 6, border: '1px solid #d1c4e9', marginBottom: 8}}
+                                placeholder="Mật khẩu mới"
+                              />
+                              {resetPasswordError && <div style={{color: '#d9534f', marginBottom: 8}}>{resetPasswordError}</div>}
+                              {resetPasswordSuccess && <div style={{color: '#4b2996', marginBottom: 8}}>{resetPasswordSuccess}</div>}
+                              <div style={{display: 'flex', gap: 8}}>
+                                <button className="admin-btn add" onClick={handleResetPasswordSubmit}>Xác nhận</button>
+                                <button className="admin-btn delete" onClick={() => { setResetPasswordUserId(null); setResetPasswordValue(''); setResetPasswordError(''); setResetPasswordSuccess(''); }}>Hủy</button>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </td>
                     </tr>

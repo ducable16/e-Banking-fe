@@ -58,6 +58,12 @@ axiosInstance.interceptors.response.use(
 
     if (res?.data && typeof res.data === 'object') {
       const body = res.data;
+      // Kiểm tra lỗi hết phiên đăng nhập
+      if (body.errorCode === 'UNAUTHORIZED') {
+        localStorage.removeItem('token');
+        alert('Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại.');
+        window.location.href = '/login';
+      }
       return Promise.reject({
         message: body.message || 'Lỗi không xác định',
         errorCode: body.errorCode || 'UNKNOWN_ERROR',
